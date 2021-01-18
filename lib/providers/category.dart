@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-class Categories with ChangeNotifier{
+class Category with ChangeNotifier {
+
   String idCategorie;
   String categories;
-  String categorieSlug;
+  Null categorieSlug;
 
-  Categories(
+  Category(
       {
       this.idCategorie,
       this.categories,
       this.categorieSlug});
 
-  Categories.fromJson(Map<String, dynamic> json) {
-
+  Category.fromJson(Map<String, dynamic> json) {
     idCategorie = json['idCategorie'];
     categories = json['categories'];
     categorieSlug = json['categorieSlug'];

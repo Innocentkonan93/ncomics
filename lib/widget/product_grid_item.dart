@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ncomics/providers/Bd.dart';
 import 'package:ncomics/providers/cart.dart';
 import 'package:ncomics/screen/product_detail_screen.dart';
@@ -6,71 +8,85 @@ import 'package:provider/provider.dart';
 
 class ProductGridItem extends StatelessWidget {
   // final String id;
-  // final String title;
-  // final String imageUrl;
 
-  // ProductGridItem(this.id, this.title, this.imageUrl);
+  // ProductGridItem(this.id,this.imageUrl);
 
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<BandeDessinees>(context);
     final cart = Provider.of<Cart>(context, listen: false);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(5),
-      child: Container(
-        decoration: BoxDecoration(boxShadow: [
-          
-        ]),
-        child: GridTile(
-          child: GestureDetector(
-            onTap: () {
-              print(product.idBd);
-
-              Navigator.of(context).pushNamed(
-                ProductDetailScreen.routeName,
-                arguments: {
-                  'idBd': product.idBd,
-                  'titleBd': product.titleBd,
-                  'prixBd': product.prixBd,
-                  'imageBd': product.imageBd,
-                },
-              );
-            },
-            child: Image.network(
-              'http://192.168.64.2/Projects/ncomic/uploads/${product.imageBd}',
-              fit: BoxFit.cover,
+    return Container(
+      width: double.infinity,
+      child: Column(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                print(product.idBd);
+                Navigator.of(context).pushNamed(ProductDetailScreen.routeName,
+                    arguments: (product.idBd));
+              },
+              child: Container(
+                decoration: BoxDecoration(),
+                child: Image.network(
+                  'http://192.168.64.2/Projects/ncomic/uploads/${product.imageBd}',
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
-          footer: Container(
-            height: 45,
-            child: GridTileBar(
-              // leading: IconButton(
-              //   icon: product.isFavorite
-              // ? Icon(Icons.favorite)
-              //       : Icon(Icons.favorite_outline),
-              //   onPressed: () {
-              //     product.favoriteToggle();
-              //   },
-              // ),
-              backgroundColor: Colors.black87.withOpacity(0.4),
-              title: Text(
-                product.titleBd,
-                textAlign: TextAlign.center,
-              ),
-              trailing: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.shopping_bag,
-                    size: 20,
-                    color: Colors.black,
+          Container(
+              height: 30,
+              child: Row(
+                children: [
+                  Text(
+                    product.titleBd,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.roboto(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                ],
+              )),
+          Container(
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  height: 25,
+                  width: 60,
+                  padding: EdgeInsets.fromLTRB(5, 5, 3, 5),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).errorColor.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(
+                      6,
+                    ),
+                  ),
+                  child: Text(
+                    product.prixBd == '0'
+                                      ? 'Free'
+                                      : product.prixBd + ' pts',
+                    style: GoogleFonts.comfortaa(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.download_outlined,
+                    color: Theme.of(context).errorColor,
+                  ),
+                  iconSize: 20,
                   onPressed: () {
                     Scaffold.of(context).hideCurrentSnackBar();
                     Scaffold.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Produit ajouté'),
-                        duration: Duration(seconds: 1),
+                        duration: Duration(seconds: 2),
                         backgroundColor: Colors.black.withOpacity(0.8),
                         action: SnackBarAction(
                           label: 'Annuler',
@@ -88,12 +104,19 @@ class ProductGridItem extends StatelessWidget {
                       product.titleBd,
                     );
                   },
-                  color: Theme.of(context).accentColor,
                 ),
-              ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    FontAwesomeIcons.solidThumbsUp,
+                    color: Colors.indigo,
+                    size: 16,
+                  ),
+                )
+              ],
             ),
-          ),
-        ),
+          )
+        ],
       ),
     );
   }

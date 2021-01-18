@@ -1,23 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:ncomics/providers/categories.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:ncomics/providers/category.dart';
 
-class CatProvider extends ChangeNotifier {
+class CatProvider with ChangeNotifier {
   bool _isProcessing = true;
-  List<Categories> _listCat = [];
+  List<Category> _categoryList = [];
 
   bool get isProcessing => _isProcessing;
-
-  List<Categories> get listCat {
-    return [..._listCat];
+  List<Category> get categoryList {
+    return _categoryList;
   }
-
-  setCatList(List<Categories> list) {
-    _listCat = list;
-    notifyListeners();
-  }
+  
 
   setIsProcessing(value) {
     _isProcessing = value;
+    notifyListeners();
+  }
+
+  setCategoryList(List<Category> list) {
+    _categoryList = list;
     notifyListeners();
   }
 }

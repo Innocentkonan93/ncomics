@@ -1,20 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:http/http.dart';
 import 'package:ncomics/model/HTTPResponse.dart';
-import 'package:ncomics/providers/categories.dart';
+import 'package:ncomics/providers/category.dart';
 
-class CATHelper {
-  static Future<HTTPResponse<List<Categories>>> getCategorie() async {
-    String url =
-        'http://192.168.64.2/Projects/ncomic/dataHandling/getCategory.php';
-    try {
+
+class CATHelpler {
+  static Future<HTTPResponse<List<Category>>> getCategory() async {
+    String url = 'http://192.168.64.2/Projects/ncomic/dataHandling/getCategory.php';
+  try {
       var response = await get(url);
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
-        List<Categories> _categories = [];
+        List<Category> _categories = [];
         body.forEach((e) {
-          Categories categories = Categories.fromJson(e);
+          Category categories = Category.fromJson(e);
           _categories.add(categories);
           print('Connexion établie');
         });

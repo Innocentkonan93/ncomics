@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ncomics/helper/bdhelper.dart';
 import 'package:http/http.dart' as http;
+import 'package:ncomics/helper/cathelper.dart';
 
 import 'package:ncomics/providers/bd_provider.dart';
 import 'package:ncomics/providers/cat_provider.dart';
-import 'package:ncomics/widget/categorie_list_item.dart';
+import 'package:ncomics/widget/category_list.dart';
 
 import 'package:ncomics/widget/products_grid.dart';
 import 'package:ncomics/widget/slider_item.dart';
@@ -43,6 +45,17 @@ class _HomeScreenState extends State<HomeScreen> {
     provider.setIsProcessing(false);
   }
 
+  _getCategory() async {
+    var provide = Provider.of<CatProvider>(context, listen: false);
+    var resp = await CATHelpler.getCategory();
+    if (resp.isSuccesful) {
+      provide.setCategoryList(resp.data);
+    } else {
+      _showSnackbar(resp.message);
+    }
+    provide.setIsProcessing(false);
+  }
+
   Future<List> getCat() async {
     final res = await http.get(
         "http://192.168.64.2/Projects/ncomic/dataHandling/getCategory.php");
@@ -52,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     _getBds();
-    //_getCategory();
+    _getCategory();
     autoLogIn();
     super.initState();
   }
@@ -87,10 +100,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
                   child: Text(
                     'Nouveautés',
-                    style: TextStyle(
-                        color: Theme.of(context).accentColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22),
+                    style: GoogleFonts.comfortaa(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -105,8 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
                   child: Text(
                     'Categories',
-                    style: TextStyle(
-                      color: Theme.of(context).accentColor,
+                    style: GoogleFonts.comfortaa(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
@@ -114,41 +126,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            Container(
-              child: FutureBuilder<List>(
-                future: getCat(),
-                builder: (ctx, ss) {
-                  if (ss.hasError) {
-                    print("Erreur");
-                  }
-                  if (ss.hasData) {
-                    return GestureDetector(
-                      // onTap: () {
-                      //   Navigator.pushNamed(
-                      //     context,
-                      //     routeName,
-                      //   );
-                      // },
-                      child: Container(
-                        height: 40,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: ss.data.length,
-                          itemBuilder: (context, i) {
-                            return CategorieListItem(ss.data[i]['categories']);
-                          },
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              ),
-            ),
+            Consumer<CatProvider>(
+                  builder: (context, catPrvider, child) {
+                    return catPrvider.isProcessing
+                        ? CircularProgressIndicator()
+                        : CategoryList();
+                  },
+                ),
             SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
@@ -157,8 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     'Recommandations',
-                    style: TextStyle(
-                      color: Theme.of(context).accentColor,
+                    style: GoogleFonts.comfortaa(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
@@ -166,12 +149,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   IconButton(
                     icon: !isGrid
                         ? Icon(
-                            Icons.apps_rounded,
-                            size: 25,
+                            Icons.grid_view,
+                            size: 22,
                             color: Theme.of(context).errorColor,
                           )
                         : Icon(
-                            Icons.list,
+                            Icons.view_list,
                             size: 25,
                             color: Theme.of(context).errorColor,
                           ),

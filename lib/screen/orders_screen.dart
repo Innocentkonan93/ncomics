@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ncomics/providers/orders.dart';
 import 'package:ncomics/widget/appDrawer.dart';
 import 'package:ncomics/widget/order_list_item.dart';
@@ -15,7 +16,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     final orderData = Provider.of<Orders>(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).errorColor,
+      ),
       drawer: AppDrawer(),
       body: orderData.orders.isNotEmpty
           ? ListView.builder(
@@ -23,13 +26,21 @@ class _OrdersScreenState extends State<OrdersScreen> {
               itemBuilder: (context, i) => OrderListItem(orderData.orders[i]),
             )
           : Center(
-            child: Column(
+              child: Column(
                 children: [
-                  SizedBox(height: 20,),
-                  Text('Aucun achat effectué'),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Aucun achat effectué',
+                    style: GoogleFonts.comfortaa(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
-          ),
+            ),
     );
   }
 }

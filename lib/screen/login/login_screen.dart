@@ -18,14 +18,19 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _numberController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+
   var _isLogin = true;
   bool isLoggedIn = false;
+  String message = '';
   String name = '';
   String idUser = '';
+  String emailUser = '';
   String pointUser = '';
-  String message = '';
+  String numUser = '';
+  String paysUser = '';
+  String naissanceUser = '';
   final _formKey = GlobalKey<FormState>();
-
 
   @override
   void initState() {
@@ -89,11 +94,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
         final SharedPreferences pref2 = await SharedPreferences.getInstance();
         pref2.setString('userid', dataUser[0]['idUser']);
+        final SharedPreferences pref3 = await SharedPreferences.getInstance();
+
+        pref3.setString('usernumber', dataUser[0]['numUser']);
+        final SharedPreferences pref4 = await SharedPreferences.getInstance();
+
+        pref4.setString('userpays', dataUser[0]['paysUser']);
+        final SharedPreferences pref5 = await SharedPreferences.getInstance();
+
+        pref5.setString('usernaissance', dataUser[0]['naissanceUSer']);
+        final SharedPreferences pref6 = await SharedPreferences.getInstance();
+
+        pref6.setString('emailUser', dataUser[0]['emailUser']);
 
         setState(() {
           name = dataUser[0]['nomUser'];
           pointUser = dataUser[0]['pointUser'];
           idUser = dataUser[0]['idUser'];
+          numUser = dataUser[0]['numUser'];
+          paysUser = dataUser[0]['paysUser'];
+          naissanceUser = dataUser[0]['naissanceUser'];
+          emailUser = dataUser[0]['emailUser'];
+
           isLoggedIn = true;
           message = 'Connexion réussie';
         });
@@ -101,6 +123,10 @@ class _LoginScreenState extends State<LoginScreen> {
         print(idUser);
         print(name);
         print(pointUser);
+        print(numUser);
+        print(paysUser);
+        print(naissanceUser);
+        print(emailUser);
 
         Navigator.of(context).pushReplacementNamed(TabScreen.routeName);
 
@@ -136,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (response.statusCode == 200) {
-        message = 'Connexion réussie';
+        message = 'Inscription réussie';
         Fluttertoast.showToast(
           msg: message,
           toastLength: Toast.LENGTH_SHORT,
@@ -163,10 +189,10 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Colors.black.withOpacity(0.3),
         child: SingleChildScrollView(
           child: SafeArea(
-                      child: Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height*0.06),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.06),
                 Padding(
                   padding: const EdgeInsets.all(26.0),
                   child: Form(
@@ -183,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         //     width: 140,
                         //   ),
                         // ),
-                        
+
                         if (!_isLogin)
                           Container(
                             decoration: BoxDecoration(
@@ -218,20 +244,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 20,
                         ),
                         Container(
-                            // height: 50,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).errorColor,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                            padding: EdgeInsets.only(bottom: 1),
-                            child: textForm('Password', 'Mot de passe court',
-                                'passWord', _passwordController,
-                                password: true)),
+                          // height: 50,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).errorColor,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                          padding: EdgeInsets.only(bottom: 1),
+                          child: textForm(
+                            'Password',
+                            'Mot de passe court',
+                            'passWord',
+                            _passwordController,
+                            password: true,
+                          ),
+                        ),
                         SizedBox(
                           height: 20,
                         ),
 
-                        SizedBox(height: 20,),
+                        SizedBox(
+                          height: 20,
+                        ),
                         Row(
                           children: [
                             Expanded(
@@ -275,7 +308,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 !_isLogin
                                     ? 'Déjà un compte ?'
                                     : 'Créer un compte',
-                                style: GoogleFonts.comfortaa(color: Colors.white),
+                                style:
+                                    GoogleFonts.comfortaa(color: Colors.white),
                               ),
                             ),
                           ],
@@ -294,18 +328,36 @@ class _LoginScreenState extends State<LoginScreen> {
                       FlatButton(
                         child: Text(
                           'CGU',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                              color: Colors.white,
+                              decoration: TextDecoration.underline),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (context) {
+                              return Container();
+                            },
+                          );
+                        },
                       ),
                       FlatButton(
                         child: Text(
                           'CGV',
                           style: TextStyle(
-                            color: Colors.white,
-                          ),
+                              color: Colors.white,
+                              decoration: TextDecoration.underline),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (context) {
+                              return Container();
+                            },
+                          );
+                        },
                       ),
                     ],
                   ),

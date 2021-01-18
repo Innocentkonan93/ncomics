@@ -22,6 +22,7 @@ class _TabScreenState extends State<TabScreen> {
   int _selectedPageIndex = 0;
   bool searched = false;
   bool isEditing = false;
+  bool close = false;
 
   String name;
   String point;
@@ -29,7 +30,7 @@ class _TabScreenState extends State<TabScreen> {
   void initState() {
     _page = [
       {'page': HomeScreen(), 'title': 'Accueil'},
-      {'page': FavoryScreen(), 'title': 'Favoris'},
+      //{'page': FavoryScreen(), 'title': 'Favoris'},
       {'page': CartScreen(), 'title': 'Panier'},
       {'page': ProfilScreen(), 'title': 'Profil'},
     ];
@@ -86,15 +87,8 @@ class _TabScreenState extends State<TabScreen> {
       drawer: AppDrawer(),
       appBar: AppBar(
         elevation: 0.0,
+        backgroundColor: Theme.of(context).errorColor,
         brightness: Brightness.light,
-
-        // leading: IconButton(
-        //     icon: Icon(
-        //       Icons.menu_rounded,
-        //       size: 30,
-        //       color: Theme.of(context).accentColor,
-        //     ),
-        //     onPressed: () {}),
         title: Text(
           _page[_selectedPageIndex]['title'],
           style: TextStyle(color: Colors.white),
@@ -104,7 +98,7 @@ class _TabScreenState extends State<TabScreen> {
             icon: Icon(
               Icons.search,
               size: 30,
-              color: Theme.of(context).accentColor,
+              color: Colors.white,
             ),
             onPressed: () {
               setState(() {
@@ -176,10 +170,10 @@ class _TabScreenState extends State<TabScreen> {
             icon: Icon(Icons.home),
             label: 'Accueil',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favoris',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.favorite),
+          //   label: 'Favoris',
+          // ),
           BottomNavigationBarItem(
             icon: Consumer<Cart>(
               builder: (context, cart, ch) => Badge(
@@ -187,7 +181,7 @@ class _TabScreenState extends State<TabScreen> {
                 value: cart.itemCount.toString(),
               ),
               child: Icon(
-                Icons.shopping_bag,
+                Icons.shopping_cart,
               ),
             ),
             label: 'Panier',

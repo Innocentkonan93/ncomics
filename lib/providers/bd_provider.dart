@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ncomics/providers/Bd.dart';
 
-class BdProvider extends ChangeNotifier {
+class BdProvider with ChangeNotifier {
   // declaration
   bool _isProcessing = true;
   List<BandeDessinees> _listbd = [];
@@ -13,13 +13,21 @@ class BdProvider extends ChangeNotifier {
     return [..._listbd];
   }
 
-
   List<BandeDessinees> get favoriteItems {
     return _listbd.where((prodItem) => prodItem.isFavorite).toList();
   }
 
+  List<BandeDessinees> bycatprod(String id) {
+    return _listbd.where((catList) => catList.categorieBd == id).toList();
+  }
+
   BandeDessinees findById(String id) {
     return _listbd.firstWhere((bd) => bd.idBd == id);
+  }
+
+  findByCat(String idcat) {
+     _listbd.where((element) => element.categorieBd == idcat);
+    notifyListeners();
   }
 
   //fonction
@@ -40,10 +48,6 @@ class BdProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getBdById(List<BandeDessinees> list, String categorie) {
-    _listbd = list.where((element) => element.categorieBd == categorie);
-    notifyListeners();
-  }
 
   getBdByCat(String cat) {
     _listbd = listbd.where((element) => element.categorieBd == cat);

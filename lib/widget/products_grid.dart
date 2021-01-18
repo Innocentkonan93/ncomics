@@ -9,8 +9,6 @@ class ProductsGrid extends StatelessWidget {
 
   ProductsGrid(this.isGrid);
 
-  // ProductsGrid(this.showFavs);
-
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<BdProvider>(context);
@@ -18,28 +16,23 @@ class ProductsGrid extends StatelessWidget {
     return isGrid
         ? GridView.builder(
             padding: const EdgeInsets.all(20.0),
-            itemCount: products.length,
-            itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-              // builder: (c) => products[i],
-              value: products[i],
-              child: ProductGridItem(
-                  // products[i].id,
-                  // products[i].title,
-                  // products[i].imageUrl,
-                  ),
-            ),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 2 / 3,
+              childAspectRatio: 2 / 3.8,
               crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              mainAxisSpacing: 20,
+            ),
+            itemCount: products.length,
+            itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+              value: products[i],
+              child: ProductGridItem(),
             ),
           )
         : ListView.builder(
             itemBuilder: (context, index) => ChangeNotifierProvider.value(
-              // builder: (c) => products[i],
               value: products[index],
-              child: ProductListItem(),),
+              child: ProductListItem(),
+            ),
             itemCount: products.length,
           );
   }

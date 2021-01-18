@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ncomics/screen/login/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,6 +11,39 @@ class ProfilScreen extends StatefulWidget {
 class _ProfilScreenState extends State<ProfilScreen> {
   String userPt = '';
   String userNam = '';
+  String userPays = '';
+  String userNaiss = '';
+  String userEmail = '';
+  String userNumb = '';
+
+  
+  @override
+  void initState() {
+    super.initState();
+    getUserInfos();
+  }
+
+  void getUserInfos() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String userPoint = prefs.getString('userpoint');
+    final String userName = prefs.getString('username');
+    final String userNaissance = prefs.getString('usernaissance');
+    final String userMail = prefs.getString('emailUser');
+    final String userNum = prefs.getString('usernumber');
+    if (userPoint != null) {
+      print(userPoint);
+      print(userName);
+      setState(() {
+        userPt = userPoint;
+        userNam = userName;
+        userNaiss = userNaissance;
+        userNam = userName;
+        userEmail = userMail;
+        userNumb = userNum;
+      });
+      return;
+    }
+  }
   Future<Null> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -22,25 +56,62 @@ class _ProfilScreenState extends State<ProfilScreen> {
     // });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getUserInfos();
-  }
 
-  void getUserInfos() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String userPoint = prefs.getString('userpoint');
-    final String userName = prefs.getString('username');
-    if (userPoint != null) {
-      print(userPoint);
-      print(userName);
-      setState(() {
-        userPt = userPoint;
-        userNam = userName;
-      });
-      return;
-    }
+  void showModal() {
+    bool edit = false;
+    showModalBottomSheet<void>(
+
+      isDismissible: true,
+      context: (context),
+      builder: (context) {
+        return SafeArea(
+          child: Container(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        height: 3,
+                        width: 100,
+                        color: Colors.black12,
+                      ),
+                      color: Colors.transparent,
+                      elevation: 0.0,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          edit = !edit;
+                        });
+                      },
+                      child: Text('Modifier'),
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: ListView(
+                    children: [],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -79,32 +150,49 @@ class _ProfilScreenState extends State<ProfilScreen> {
               SizedBox(
                 height: 20,
               ),
-              ListTile(
-                title: Text('Mes achats'),
-                subtitle: Text('...'),
-                trailing: Icon(
-                  Icons.arrow_right,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-             
               Divider(),
               ListTile(
-                title: Text('Username'),
-                subtitle: Text('...'),
-                trailing: Icon(
-                  Icons.arrow_right,
-                  color: Theme.of(context).primaryColor,
+                title: Text(
+                  'Mes informations',
+                  style: GoogleFonts.comfortaa(fontSize: 22),
                 ),
+              ),
+
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.red.withOpacity(0.7),
+                  child: Icon(Icons.person),
+                ),
+                title: Text(
+                  userNam == null ? 'Non renseignée': userNam 
+                ),
+                trailing: Icon(Icons.edit),
+              ),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.red.withOpacity(0.7),
+                  child: Icon(Icons.mail),
+                ),
+                title: Text(userEmail == null ? 'Non renseignée': userNam),
+                trailing: Icon(Icons.edit),
+              ),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.red.withOpacity(0.7),
+                  child: Icon(Icons.tag),
+                ),
+                title: Text(userNumb.toString()),
+                trailing: Icon(Icons.edit),
               ),
               Divider(),
               ListTile(
                 title: Text('Paramètres'),
-                subtitle: Text('...'),
+                // subtitle: Text('...'),
                 trailing: Icon(
                   Icons.arrow_right,
                   color: Theme.of(context).primaryColor,
                 ),
+                onTap: showModal,
               ),
               Divider(),
               SizedBox(
@@ -154,109 +242,4 @@ class _ProfilScreenState extends State<ProfilScreen> {
       ),
     );
   }
-
-// void _showProfilModel(String name, Function logout, bool isEditing) {
-//     showModalBottomSheet(
-//       context: context,
-//       builder: (contex) {
-//         return Scaffold(
-//           backgroundColor: Color.fromRGBO(255, 254, 229, 1),
-//           body: SafeArea(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 Container(
-//                   padding: EdgeInsets.all(20),
-//                   height: 160,
-//                   width: double.infinity,
-//                   color: Color(0xFF0A161C),
-//                   child: Column(
-//                     children: [
-//                       Row(
-//                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                         children: [
-//                           CircleAvatar(
-//                             radius: 60,
-//                             child: Icon(
-//                               Icons.person_outline_rounded,
-//                               size: 70,
-//                             ),
-//                           ),
-//                           Column(
-//                             children: [
-//                               Text(
-//                                 name,
-//                                 style: TextStyle(
-//                                     fontSize: 40, color: Colors.yellow),
-//                               ),
-
-//                               Text(
-//                                 point + ' points',
-//                                 style: TextStyle(
-//                                     fontSize: 30,
-//                                     color: Colors.yellow,
-//                                     fontWeight: FontWeight.w100),
-//                               ),
-//                             ],
-//                           )
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 Column(
-//                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                   children: [
-//                     ListTile(
-//                       trailing: Text(
-//                         'Deconnexion',
-//                         style: TextStyle(
-//                             fontSize: 20,
-//                             fontWeight: FontWeight.bold,
-//                             color: Colors.blue),
-//                       ),
-//                       onTap: () {
-//                         print('yesss');
-//                         setState(() {
-//                           isEditing = !isEditing;
-//                         });
-//                       },
-//                     ),
-//                     SizedBox(
-//                       height: 20,
-//                     ),
-//                     ListTile(
-//                       leading: Icon(Icons.lock),
-//                       title: Text('Mot de passe'),
-//                       subtitle: Text('*******'),
-//                       trailing: IconButton(
-//                         icon: Icon(Icons.edit),
-//                         onPressed: () {},
-//                       ),
-//                     ),
-//                     SizedBox(
-//                       height: 50,
-//                     ),
-//                     RaisedButton.icon(
-//                       elevation: 10,
-//                       onPressed: () {
-//                         Navigator.pushNamed(context, AddPoints.routeName);
-//                       },
-//                       icon: Icon(Icons.add, color: Colors.white,),
-//                       label: Text('Ajouter des points', style: TextStyle(color: Colors.white),),
-//                       color: Colors.blue,
-//                       shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(20)),
-//                     ),
-//                   ],
-//                 )
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//       isScrollControlled: false,
-//     );
-//   }
-//
 }
