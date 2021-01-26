@@ -173,7 +173,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                   backgroundColor: Colors.red.withOpacity(0.7),
                   child: Icon(Icons.mail),
                 ),
-                title: Text(userEmail == null ? 'Non renseignée': userNam),
+                title: Text(userEmail == null ? 'Non renseignée': userEmail),
                 trailing: Icon(Icons.edit),
               ),
               ListTile(

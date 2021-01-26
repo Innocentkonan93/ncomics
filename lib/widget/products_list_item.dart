@@ -76,7 +76,9 @@ class _ProductListItemState extends State<ProductListItem> {
                       children: [Text('Auteur: ${product.nomAuteur}')],
                     ),
                     SizedBox(height: 8),
-                    StarDisplay(int.parse(product.ratingBd)),
+                    StarDisplay(
+                      int.parse(product.ratingBd),
+                    ),
                     Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,15 +100,27 @@ class _ProductListItemState extends State<ProductListItem> {
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
-                                    color: Colors.green[50],
                                     borderRadius: BorderRadius.circular(3)),
-                                child: Text(
-                                  product.prixBd == '0'
-                                      ? 'Gratuit'
-                                      : product.prixBd + ' pt',
-                                  style: GoogleFonts.notoSans(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                child: Container(
+                                  height: 25,
+                                  width: 60,
+                                  padding: EdgeInsets.fromLTRB(5, 5, 3, 5),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .errorColor
+                                        .withOpacity(0.8),
+                                    borderRadius: BorderRadius.circular(
+                                      6,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    product.prixBd == '0'
+                                        ? 'Free'
+                                        : product.prixBd + ' pts',
+                                    style: GoogleFonts.comfortaa(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               )

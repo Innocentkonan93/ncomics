@@ -4,12 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ncomics/providers/Bd.dart';
 import 'package:ncomics/providers/cart.dart';
 import 'package:ncomics/screen/product_detail_screen.dart';
+import 'package:ncomics/widget/star_display.dart';
 import 'package:provider/provider.dart';
 
 class ProductGridItem extends StatelessWidget {
-  // final String id;
 
-  // ProductGridItem(this.id,this.imageUrl);
+   final String query;
+
+   ProductGridItem({this.query});
 
   @override
   Widget build(BuildContext context) {
@@ -28,28 +30,44 @@ class ProductGridItem extends StatelessWidget {
               },
               child: Container(
                 decoration: BoxDecoration(),
-                child: Image.network(
-                  'http://192.168.64.2/Projects/ncomic/uploads/${product.imageBd}',
-                  fit: BoxFit.cover,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(3),
+                  child: Image.network(
+                    'http://192.168.64.2/Projects/ncomic/uploads/${product.imageBd}',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
           ),
           Container(
-              height: 30,
-              child: Row(
-                children: [
-                  Text(
-                    product.titleBd,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.roboto(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+            height: 30,
+            child: Row(
+              children: [
+                Expanded(
+                  child: FittedBox(
+                    child: Text(
+                      product.titleBd,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                        fontSize: 14,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ],
-              )),
+                ),
+                SizedBox(
+                  width: 12,
+                ),
+                Expanded(
+                  child: StarDisplay(
+                    product.ratingBd == null ? 0 : int.parse(product.ratingBd),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             height: 40,
             child: Row(
@@ -66,9 +84,7 @@ class ProductGridItem extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    product.prixBd == '0'
-                                      ? 'Free'
-                                      : product.prixBd + ' pts',
+                    product.prixBd == '0' ? 'Free' : product.prixBd + ' pts',
                     style: GoogleFonts.comfortaa(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -77,13 +93,13 @@ class ProductGridItem extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(
-                    Icons.download_outlined,
+                    Icons.add_shopping_cart_sharp,
                     color: Theme.of(context).errorColor,
                   ),
                   iconSize: 20,
                   onPressed: () {
-                    Scaffold.of(context).hideCurrentSnackBar();
-                    Scaffold.of(context).showSnackBar(
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Produit ajouté'),
                         duration: Duration(seconds: 2),
@@ -115,7 +131,7 @@ class ProductGridItem extends StatelessWidget {
                 )
               ],
             ),
-          )
+          ),
         ],
       ),
     );

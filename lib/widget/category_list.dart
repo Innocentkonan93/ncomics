@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ncomics/providers/cat_provider.dart';
-import 'package:ncomics/providers/category.dart';
+
 import 'package:ncomics/widget/category_list_item.dart';
 import 'package:provider/provider.dart';
 

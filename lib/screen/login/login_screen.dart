@@ -1,3 +1,4 @@
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,7 +19,10 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _numberController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
+
+  //Confetti
+  ConfettiController _confettiController;
+  // TextEditingController _emailController = TextEditingController();
 
   var _isLogin = true;
   bool isLoggedIn = false;
@@ -35,6 +39,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     autoLogIn();
+    _confettiController = ConfettiController(
+      duration: Duration(seconds: 5),
+    );
     super.initState();
   }
 
@@ -163,16 +170,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (response.statusCode == 200) {
         message = 'Inscription réussie';
-        Fluttertoast.showToast(
-          msg: message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.orange,
-          textColor: Colors.white,
-          fontSize: 16.0,
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              shape: RoundedRectangleBorder(),
+              content: Text(
+                'Félicitation ! Inscription Réussie',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              backgroundColor: Colors.green),
         );
         print(response);
+        _confettiController.play();
       }
       _nameController.clear();
       _numberController.clear();
@@ -188,180 +199,194 @@ class _LoginScreenState extends State<LoginScreen> {
         height: MediaQuery.of(context).size.height,
         color: Colors.black.withOpacity(0.3),
         child: SingleChildScrollView(
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.06),
-                Padding(
-                  padding: const EdgeInsets.all(26.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        // Container(
-                        //   height: 180,
-                        //   width: 180,
-                        //   padding: EdgeInsets.all(15),
-                        //   child: Image.asset(
-                        //     'assets/images/logo.JPG',
-                        //     height: 140,
-                        //     width: 140,
-                        //   ),
-                        // ),
+          child: ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            particleDrag: 0.05,
+            numberOfParticles: 30,
+            emissionFrequency: 0.05,
+            shouldLoop: false,
+            colors: [
+              Colors.red,
+              Colors.green,
+              Colors.orangeAccent,
+              Colors.yellowAccent,
+            ],
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+                  Padding(
+                    padding: const EdgeInsets.all(26.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          // Container(
+                          //   height: 180,
+                          //   width: 180,
+                          //   padding: EdgeInsets.all(15),
+                          //   child: Image.asset(
+                          //     'assets/images/logo.JPG',
+                          //     height: 140,
+                          //     width: 140,
+                          //   ),
+                          // ),
 
-                        if (!_isLogin)
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).errorColor,
-                              borderRadius: BorderRadius.circular(2),
+                          if (!_isLogin)
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).errorColor,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              padding: EdgeInsets.only(bottom: 1),
+                              child: Container(
+                                  child: textForm(
+                                'Name',
+                                'Champ obligatoire',
+                                'userName',
+                                _nameController,
+                              )),
                             ),
-                            padding: EdgeInsets.only(bottom: 1),
-                            child: Container(
-                                child: textForm(
-                              'Name',
-                              'Champ obligatoire',
-                              'userName',
-                              _nameController,
-                            )),
+                          SizedBox(
+                            height: 20,
                           ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Container(
+                          Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).errorColor,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              padding: EdgeInsets.only(bottom: 1),
+                              child: textForm(
+                                'Phone number',
+                                'Numero incorrect',
+                                'phoneNum',
+                                _numberController,
+                              )),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            // height: 50,
                             decoration: BoxDecoration(
                               color: Theme.of(context).errorColor,
                               borderRadius: BorderRadius.circular(2),
                             ),
                             padding: EdgeInsets.only(bottom: 1),
                             child: textForm(
-                              'Phone number',
-                              'Numero incorrect',
-                              'phoneNum',
-                              _numberController,
-                            )),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          // height: 50,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).errorColor,
-                            borderRadius: BorderRadius.circular(2),
+                              'Password',
+                              'Mot de passe court',
+                              'passWord',
+                              _passwordController,
+                              password: true,
+                            ),
                           ),
-                          padding: EdgeInsets.only(bottom: 1),
-                          child: textForm(
-                            'Password',
-                            'Mot de passe court',
-                            'passWord',
-                            _passwordController,
-                            password: true,
+                          SizedBox(
+                            height: 20,
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
 
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: RaisedButton(
-                                color: Theme.of(context).errorColor,
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: RaisedButton(
+                                  color: Theme.of(context).errorColor,
+                                  onPressed: () {
+                                    _isLogin ? loginUser() : addUser();
+                                  },
+                                  child: Text(
+                                    _isLogin ? 'Connexion' : 'Inscription',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(15),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            message,
+                          ),
+                          Column(
+                            children: [
+                              FlatButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  side: BorderSide(color: Colors.white),
+                                ),
                                 onPressed: () {
-                                  _isLogin ? loginUser() : addUser();
+                                  setState(() {
+                                    _isLogin = !_isLogin;
+                                  });
                                 },
                                 child: Text(
-                                  _isLogin ? 'Connexion' : 'Inscription',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
-                                  ),
+                                  !_isLogin
+                                      ? 'Déjà un compte ?'
+                                      : 'Créer un compte',
+                                  style: GoogleFonts.comfortaa(
+                                      color: Colors.white),
                                 ),
-                                padding: EdgeInsets.all(15),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          message,
-                        ),
-                        Column(
-                          children: [
-                            FlatButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                side: BorderSide(color: Colors.white),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _isLogin = !_isLogin;
-                                });
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.10,
+                  ),
+                  if (!_isLogin)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FlatButton(
+                          child: Text(
+                            'CGU',
+                            style: TextStyle(
+                                color: Colors.white,
+                                decoration: TextDecoration.underline),
+                          ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) {
+                                return Container();
                               },
-                              child: Text(
-                                !_isLogin
-                                    ? 'Déjà un compte ?'
-                                    : 'Créer un compte',
-                                style:
-                                    GoogleFonts.comfortaa(color: Colors.white),
-                              ),
-                            ),
-                          ],
+                            );
+                          },
+                        ),
+                        FlatButton(
+                          child: Text(
+                            'CGV',
+                            style: TextStyle(
+                                color: Colors.white,
+                                decoration: TextDecoration.underline),
+                          ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) {
+                                return Container();
+                              },
+                            );
+                          },
                         ),
                       ],
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.10,
-                ),
-                if (!_isLogin)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FlatButton(
-                        child: Text(
-                          'CGU',
-                          style: TextStyle(
-                              color: Colors.white,
-                              decoration: TextDecoration.underline),
-                        ),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (context) {
-                              return Container();
-                            },
-                          );
-                        },
-                      ),
-                      FlatButton(
-                        child: Text(
-                          'CGV',
-                          style: TextStyle(
-                              color: Colors.white,
-                              decoration: TextDecoration.underline),
-                        ),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (context) {
-                              return Container();
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

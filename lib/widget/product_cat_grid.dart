@@ -20,7 +20,7 @@ class ProductCatGrid extends StatelessWidget {
       padding: EdgeInsets.all(20),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 2 / 3,
+        childAspectRatio: 2 / 3.7,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),

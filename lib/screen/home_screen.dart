@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isGrid = true;
 
   _showSnackbar(String message, {Color bgColor}) {
-    Scaffold.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor: bgColor,

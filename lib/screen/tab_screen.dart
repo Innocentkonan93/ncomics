@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ncomics/providers/Bd.dart';
+import 'package:ncomics/providers/bd_provider.dart';
 import 'package:ncomics/providers/cart.dart';
 import 'package:ncomics/screen/cart_screen.dart';
-import 'package:ncomics/screen/favory_screen.dart';
+
 import 'package:ncomics/screen/home_screen.dart';
 import 'package:ncomics/screen/login/login_screen.dart';
 
 import 'package:ncomics/screen/profil_screen.dart';
 import 'package:ncomics/widget/appDrawer.dart';
 import 'package:ncomics/widget/badge.dart';
+import 'package:ncomics/widget/product_grid_item.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -97,13 +100,14 @@ class _TabScreenState extends State<TabScreen> {
           IconButton(
             icon: Icon(
               Icons.search,
-              size: 30,
+              size: 25,
               color: Colors.white,
             ),
             onPressed: () {
-              setState(() {
-                searched = !searched;
-              });
+              showSearch(context: context, delegate: DataSearch());
+              // setState(() {
+              //   searched = !searched;
+              // });
             },
           ),
           // Consumer<Cart>(
@@ -124,44 +128,44 @@ class _TabScreenState extends State<TabScreen> {
           //   ),
           // ),
         ],
-        bottom: searched
-            ? PreferredSize(
-                child: Container(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                    height: 37,
-                    decoration: BoxDecoration(
-                        //border: Border.all(color: Colors.grey),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(17)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              hintText: 'Recherchez',
-                              hintStyle: TextStyle(),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 7,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.search,
-                              size: 26, color: Colors.grey.withOpacity(0.4)),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                preferredSize: Size(double.infinity, 50),
-              )
-            : null,
+        // bottom: searched
+        //     ? PreferredSize(
+        //         child: Container(
+        //           child: Container(
+        //             margin: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+        //             height: 37,
+        //             decoration: BoxDecoration(
+        //                 //border: Border.all(color: Colors.grey),
+        //                 color: Colors.white,
+        //                 borderRadius: BorderRadius.circular(17)),
+        //             child: Row(
+        //               crossAxisAlignment: CrossAxisAlignment.start,
+        //               children: [
+        //                 Expanded(
+        //                   child: TextFormField(
+        //                     textAlign: TextAlign.center,
+        //                     decoration: InputDecoration(
+        //                       hintText: 'Recherchez',
+        //                       hintStyle: TextStyle(),
+        //                       border: InputBorder.none,
+        //                     ),
+        //                   ),
+        //                 ),
+        //                 SizedBox(
+        //                   width: 7,
+        //                 ),
+        //                 IconButton(
+        //                   icon: Icon(Icons.search,
+        //                       size: 26, color: Colors.grey.withOpacity(0.4)),
+        //                   onPressed: () {},
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //         preferredSize: Size(double.infinity, 50),
+        //       )
+        //     : null,
       ),
       body: _page[_selectedPageIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(
@@ -196,6 +200,53 @@ class _TabScreenState extends State<TabScreen> {
         elevation: 90,
         selectedItemColor: Theme.of(context).errorColor,
         unselectedItemColor: Theme.of(context).accentColor,
+      ),
+    );
+  }
+}
+
+class DataSearch extends SearchDelegate<String> {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    final product = Provider.of<BdProvider>(context).listbd;
+    return [
+      IconButton(
+        icon: Icon(Icons.close),
+        onPressed: () {
+          query = "";
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {}
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final productsData = Provider.of<BdProvider>(context);
+    final products = productsData.listbd;
+
+    final producths = productsData.listbd
+        .where((element) => element.titleBd.startsWith(query));
+
+    return ListView.builder(
+      itemCount: products.where((element) => element.titleBd.startsWith(query)).length,
+      itemBuilder: (context, index) => ListTile(
+        title: Text(products[index].titleBd),
       ),
     );
   }

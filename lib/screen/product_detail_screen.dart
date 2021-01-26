@@ -24,7 +24,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    int rating = 0;
+
     String idBd = '';
 
     print('bd detail screen');
@@ -207,8 +207,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       borderRadius: BorderRadius.circular(40)),
                                   color: Theme.of(context).errorColor,
                                   onPressed: () {
-                                    Scaffold.of(context).hideCurrentSnackBar();
-                                    Scaffold.of(context).showSnackBar(
+                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text('Produit ajouté'),
                                         duration: Duration(seconds: 2),
@@ -360,35 +360,45 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       SizedBox(height: 10),
                       Container(
-                        height: 500,
-                        child: ListView(
-                          children: [
-                            for (var i = 0; i < 2; i++)
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          bottom: 20, left: 10, right: 10),
-                                      height: 60,
-                                      width: 60,
-                                      color: Colors.grey,
-                                    ),
-                                    Container(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text('Episode ${i + 1}'),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                          ],
+                        margin: EdgeInsets.symmetric(horizontal: 15,),
+                        height: 100,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(3),
+                          color: Colors.white,
                         ),
-                      )
+                        child: Text('ghgdf'),
+                      ),
+                      // Container(
+                      //   height: 500,
+                      //   child: ListView(
+                      //     children: [
+                      //       for (var i = 0; i < 2; i++)
+                      //         Container(
+                      //           child: Row(
+                      //             children: [
+                      //               Container(
+                      //                 margin: EdgeInsets.only(
+                      //                     bottom: 20, left: 10, right: 10),
+                      //                 height: 60,
+                      //                 width: 60,
+                      //                 color: Colors.grey,
+                      //               ),
+                      //               Container(
+                      //                 child: Column(
+                      //                   mainAxisAlignment:
+                      //                       MainAxisAlignment.center,
+                      //                   children: [
+                      //                     Text('Episode ${i + 1}'),
+                      //                   ],
+                      //                 ),
+                      //               )
+                      //             ],
+                      //           ),
+                      //         ),
+                      //     ],
+                      //   ),
+                      // )
                     ],
                   ),
                 ),

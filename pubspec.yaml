@@ -25,7 +25,9 @@ dependencies:
     sdk: flutter
   animate_do: ^1.7.5
   carousel_slider: ^2.3.1
+  confetti: ^0.5.4+1
   cupertino_icons: ^1.0.0
+  flutter_local_notifications: ^3.0.3
   flutter_spinkit: ^4.1.2+1
   fluttertoast: ^7.1.6
   font_awesome_flutter: ^8.11.0

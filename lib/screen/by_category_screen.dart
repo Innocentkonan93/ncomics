@@ -5,7 +5,7 @@ import 'package:ncomics/providers/cart.dart';
 import 'package:ncomics/screen/cart_screen.dart';
 import 'package:ncomics/widget/badge.dart';
 import 'package:ncomics/widget/product_cat_grid.dart';
-import 'package:ncomics/widget/products_grid.dart';
+
 import 'package:provider/provider.dart';
 
 class ByCategroyScreen extends StatelessWidget {

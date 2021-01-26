@@ -23,9 +23,6 @@ class CartItemList extends StatefulWidget {
 
 class _CartItemListState extends State<CartItemList> {
   @override
-
-  
-
   Widget build(BuildContext context) {
     return Dismissible(
       key: ValueKey(widget.productId),
@@ -41,11 +38,13 @@ class _CartItemListState extends State<CartItemList> {
       },
       child: Container(
         decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-          width: 1,
-          color: Colors.black26,
-        ))),
+          border: Border(
+            bottom: BorderSide(
+              width: 1,
+              color: Colors.black26,
+            ),
+          ),
+        ),
         child: ListTile(
           leading: Chip(
             label: Text(
@@ -72,7 +71,10 @@ class _CartItemListState extends State<CartItemList> {
                 onPressed: () {
                   Navigator.of(ctx).pop(false);
                 },
-                child: Text('Non', style: TextStyle(color: Colors.black),),
+                child: Text(
+                  'Non',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
               FlatButton(
                 onPressed: () {
@@ -85,6 +87,5 @@ class _CartItemListState extends State<CartItemList> {
         );
       },
     );
-    
   }
 }

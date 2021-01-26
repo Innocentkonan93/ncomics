@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:ncomics/providers/Bd.dart';
 import 'package:ncomics/providers/cart.dart';
@@ -20,7 +21,11 @@ import 'package:ncomics/screen/tab_screen.dart';
 
 import 'package:provider/provider.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationPlugIn =
+    FlutterLocalNotificationsPlugin();
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MyApp(),
   );
@@ -43,7 +48,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Cart(),
         ),
-        
         ChangeNotifierProvider.value(
           value: Orders(),
         )

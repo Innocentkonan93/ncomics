@@ -33,13 +33,12 @@ class Badge extends StatelessWidget {
               minHeight: 12,
             ),
             child: Text(
-              value,
+              value ,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 10,
-                color: Colors.white,
-                fontWeight: FontWeight.bold
-              ),
+                  fontSize: 10,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         )
