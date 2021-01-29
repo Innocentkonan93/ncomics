@@ -6,16 +6,16 @@ import 'package:ncomics/model/HTTPResponse.dart';
 
 class APIHelper {
   static Future<HTTPResponse<List<BandeDessinees>>> getBandeDessinees() async {
-    String url = 'http://192.168.64.2/Projects/ncomic/dataHandling/getBd.php';
+    String url = 'http://bad-event.com/ncomic/dataHandling/getBd.php';
     try {
       var response = await get(url);
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         List<BandeDessinees> _bandeDessinee = [];
+          print('Connexion établie');
         body.forEach((e) {
           BandeDessinees bandeDessinee = BandeDessinees.fromJson(e);
           _bandeDessinee.add(bandeDessinee);
-          print('Connexion établie');
         });
         return HTTPResponse(
           true,

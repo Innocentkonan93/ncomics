@@ -38,7 +38,7 @@ class _ProductListItemState extends State<ProductListItem> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Image.network(
-                'http://192.168.64.2/Projects/ncomic/uploads/${product.imageBd}',
+                'http://bad-event.com/ncomic/uploads/${product.imageBd}',
                 fit: BoxFit.cover,
               ),
             ),
@@ -77,7 +77,9 @@ class _ProductListItemState extends State<ProductListItem> {
                     ),
                     SizedBox(height: 8),
                     StarDisplay(
-                      int.parse(product.ratingBd),
+                      product.ratingBd == null
+                          ? 0
+                          : int.parse(product.ratingBd),
                     ),
                     Spacer(),
                     Row(
@@ -86,17 +88,6 @@ class _ProductListItemState extends State<ProductListItem> {
                         Container(
                           child: Row(
                             children: [
-                              // Consumer<BandeDessinees>(
-                              //   builder: (context, bd, child) => IconButton(
-                              //     icon: Icon(FontAwesomeIcons.thumbsUp),
-                              //     onPressed: () {
-                              //       bd.incrementCounter();
-                              //     },
-                              //   ),
-                              // ),
-                              // Text(product.getCounter().toString(),
-                              //     style: TextStyle(fontSize: 17)),
-
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
@@ -106,12 +97,8 @@ class _ProductListItemState extends State<ProductListItem> {
                                   width: 60,
                                   padding: EdgeInsets.fromLTRB(5, 5, 3, 5),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .errorColor
-                                        .withOpacity(0.8),
-                                    borderRadius: BorderRadius.circular(
-                                      6,
-                                    ),
+                                    
+                                    
                                   ),
                                   child: Text(
                                     product.prixBd == '0'
@@ -119,7 +106,9 @@ class _ProductListItemState extends State<ProductListItem> {
                                         : product.prixBd + ' pts',
                                     style: GoogleFonts.comfortaa(
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: Theme.of(context)
+                                        .errorColor
+                                        .withOpacity(0.8),
                                     ),
                                   ),
                                 ),
@@ -128,24 +117,33 @@ class _ProductListItemState extends State<ProductListItem> {
                           ),
                         ),
                         Container(
+                          height: 28,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                        .errorColor
+                                        .withOpacity(0.8),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                           child: FlatButton(
-                            padding: EdgeInsets.all(3),
                             child: Row(
                               children: [
                                 Text(
-                                  'Acheter',
+                                  'Ajouter',
                                   style: TextStyle(
-                                      color: Theme.of(context).errorColor),
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 Icon(
-                                  Icons.download_rounded,
-                                  color: Theme.of(context).errorColor,
+                                  Icons.add_shopping_cart,
+                                  color: Colors.white,
+                                  size: 16,
                                 )
                               ],
                             ),
                             onPressed: () {
-                              Scaffold.of(context).hideCurrentSnackBar();
-                              Scaffold.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text('Produit ajouté'),
                                   duration: Duration(seconds: 1),

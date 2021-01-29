@@ -34,7 +34,9 @@ class _CartItemListState extends State<CartItemList> {
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        Provider.of<Cart>(context, listen: false).removeItem(widget.productId);
+        Provider.of<Cart>(context, listen: false).removeItem(
+          widget.productId,
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -46,6 +48,42 @@ class _CartItemListState extends State<CartItemList> {
           ),
         ),
         child: ListTile(
+          trailing: IconButton(
+            icon: Icon(Icons.delete_forever, color: Colors.orange[900],),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: Text("❌ Suppression"),
+                  content: Text(
+                      'Etes-vous sûr de vouloir supprimer ${widget.title}'),
+                  actions: [
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(ctx).pop(false);
+                      },
+                      child: Text(
+                        'Non',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(ctx).pop(true);
+
+                        Provider.of<Cart>(context, listen: false).removeItem(
+                          widget.productId,
+                        );
+                      },
+                      child: Text('Oui'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          title: Text(widget.title),
+          subtitle: Text('prix : ${widget.price * widget.quantity}'),
           leading: Chip(
             label: Text(
               '${widget.price}',
@@ -55,9 +93,6 @@ class _CartItemListState extends State<CartItemList> {
               context,
             ).primaryColor,
           ),
-          title: Text(widget.title),
-          subtitle: Text('Total : ${widget.price * widget.quantity}'),
-          trailing: Text('${widget.quantity} x'),
         ),
       ),
       confirmDismiss: (direction) {

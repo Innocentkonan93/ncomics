@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       SnackBar(
         content: Text(message),
         backgroundColor: bgColor,
+        duration: Duration(seconds: 10),
       ),
     );
   }
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (response.isSuccesful) {
       provider.setBdList(response.data);
     } else {
-      _showSnackbar(response.message);
+      _showSnackbar(response.message, bgColor: Colors.red);
     }
     provider.setIsProcessing(false);
   }
@@ -51,14 +52,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (resp.isSuccesful) {
       provide.setCategoryList(resp.data);
     } else {
-      _showSnackbar(resp.message);
+      //_showSnackbar(resp.message);
     }
     provide.setIsProcessing(false);
   }
 
   Future<List> getCat() async {
     final res = await http.get(
-        "http://192.168.64.2/Projects/ncomic/dataHandling/getCategory.php");
+        "http://bad-event.com/ncomic/dataHandling/getCategory.php");
     return json.decode(res.body);
   }
 

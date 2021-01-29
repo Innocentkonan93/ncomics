@@ -88,42 +88,71 @@ class _CartScreenState extends State<CartScreen> {
       // ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Text(
-                    'Mon panier',
-                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
               SizedBox(
                 height: 10,
               ),
               Container(
                 decoration: BoxDecoration(),
-                child: Row(
-                  children: [
-                    Text('Solde actuel :'),
-                    Text('$userPt'),
-                  ],
+                child: Chip(
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                  label: Row(
+                    children: [
+                      Text('Solde :'),
+                      Spacer(),
+                      Text('$userPt', style: GoogleFonts.quicksand(
+                              fontSize: 16,
+                              color: Colors.red[700],
+                              fontWeight: FontWeight.bold,
+                            ),),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
                 height: 10,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text('Total:'),
-                  Chip(
-                    label: Text(cart.totalAmount.toString()),
+                  Expanded(
+                    child: Chip(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                      label: Row(
+                        children: [
+                          Text('Total :'),
+                          Spacer(),
+                          Text(
+                            cart.totalAmount.toString(),
+                            style: GoogleFonts.quicksand(
+                              fontSize: 16,
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  FlatButton(
-                    child: Text('Acheter'),
-                    onPressed: () {
+                  SizedBox(
+                    width: 10,
+                  ),
+                  RaisedButton(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        'Acheter',
+                        style: GoogleFonts.quicksand(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    color: Theme.of(context).errorColor,
+                    shape: StadiumBorder(),
+                    onPressed: cart.items.length == 0 ? null : () {
                       if (cart.totalAmount > userPt) {
                         showD(context);
                       } else {

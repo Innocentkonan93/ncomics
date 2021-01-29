@@ -8,16 +8,16 @@ import 'package:ncomics/providers/category.dart';
 
 class CATHelpler {
   static Future<HTTPResponse<List<Category>>> getCategory() async {
-    String url = 'http://192.168.64.2/Projects/ncomic/dataHandling/getCategory.php';
+    String url = 'http://bad-event.com/ncomic/dataHandling/getCategory.php';
   try {
       var response = await get(url);
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         List<Category> _categories = [];
+          print('Connexion établie');
         body.forEach((e) {
           Category categories = Category.fromJson(e);
           _categories.add(categories);
-          print('Connexion établie');
         });
         return HTTPResponse(
           true,

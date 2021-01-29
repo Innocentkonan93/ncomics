@@ -1,4 +1,6 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ncomics/providers/Bd.dart';
@@ -6,12 +8,25 @@ import 'package:ncomics/providers/cart.dart';
 import 'package:ncomics/screen/product_detail_screen.dart';
 import 'package:ncomics/widget/star_display.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
-class ProductGridItem extends StatelessWidget {
+class ProductGridItem extends StatefulWidget {
+  final String query;
 
-   final String query;
+  ProductGridItem({this.query});
 
-   ProductGridItem({this.query});
+  @override
+  _ProductGridItemState createState() => _ProductGridItemState();
+}
+
+class _ProductGridItemState extends State<ProductGridItem> {
+  String idBd;
+  Future<List> ratingPost() async {
+    final resp = await http
+        .post('http://bad-event.com/ncomic/dataHandling/addRating.php', body: {
+      'idBd': idBd,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +48,7 @@ class ProductGridItem extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(3),
                   child: Image.network(
-                    'http://192.168.64.2/Projects/ncomic/uploads/${product.imageBd}',
+                    'http://bad-event.com/ncomic/uploads/${product.imageBd}',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -58,7 +73,7 @@ class ProductGridItem extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: 12,
+                  width: 3,
                 ),
                 Expanded(
                   child: StarDisplay(
@@ -70,31 +85,32 @@ class ProductGridItem extends StatelessWidget {
           ),
           Container(
             height: 40,
+            width: double.infinity,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  height: 25,
-                  width: 60,
-                  padding: EdgeInsets.fromLTRB(5, 5, 3, 5),
+                Text(
+                  product.prixBd == '0' ? 'Free' : product.prixBd + ' pts',
+                  style: GoogleFonts.comfortaa(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).errorColor,
+                  ),
+                ),
+                IconButton(
+                  icon: Container(
+                    height: 27,
+                  padding: EdgeInsets.fromLTRB(5, 5, 5, 7),
                   decoration: BoxDecoration(
                     color: Theme.of(context).errorColor.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(
                       6,
                     ),
                   ),
-                  child: Text(
-                    product.prixBd == '0' ? 'Free' : product.prixBd + ' pts',
-                    style: GoogleFonts.comfortaa(
-                      fontWeight: FontWeight.bold,
+                    child: Icon(
+                      Icons.add_shopping_cart_sharp,
                       color: Colors.white,
+                      size: 17,
                     ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.add_shopping_cart_sharp,
-                    color: Theme.of(context).errorColor,
                   ),
                   iconSize: 20,
                   onPressed: () {
@@ -121,8 +137,55 @@ class ProductGridItem extends StatelessWidget {
                     );
                   },
                 ),
+                Container(
+                  height: 25,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).errorColor.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(
+                      6,
+                    ),
+                  ),
+                  child: Text('')
+                ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      idBd = product.idBd;
+                    });
+                    print(product.isRating);
+                    ratingPost();
+                    Flushbar(
+                        flushbarPosition: FlushbarPosition.TOP,
+                        title: "Vote",
+                        duration: Duration(seconds: 5),
+                        messageText: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Vote enregistré",
+                              style: GoogleFonts.quicksand(
+                                color: Colors.green,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Icon(
+                              FontAwesomeIcons.checkCircle,
+                              color: Colors.white,
+                              size: 33,
+                            ),
+                          ],
+                        ),
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        borderRadius: 8)
+                      ..show(context);
+                    // Fluttertoast.showToast(
+                    //     msg: 'Note enregistré',
+                    //     backgroundColor: Colors.black.withOpacity(0.7),
+                    //     textColor: Colors.white,
+                    //     timeInSecForIosWeb: 3,
+                    //     toastLength: Toast.LENGTH_LONG,
+                    //     fontSize: 13);
+                  },
                   icon: Icon(
                     FontAwesomeIcons.solidThumbsUp,
                     color: Colors.indigo,

@@ -46,7 +46,8 @@ class Cart with ChangeNotifier {
           id: existingCartItem.id,
           title: existingCartItem.title,
           price: existingCartItem.price,
-          quantity: existingCartItem.quantity + 1,
+          quantity: existingCartItem.quantity,
+          //quantity: existingCartItem.quantity + 1,
         ),
       );
     } else {

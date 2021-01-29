@@ -25,7 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
   // TextEditingController _emailController = TextEditingController();
 
   var _isLogin = true;
+
   bool isLoggedIn = false;
+
   String message = '';
   String name = '';
   String idUser = '';
@@ -52,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (userPoint != null) {
       print(userPoint);
       print(userName);
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return TabScreen();
       }));
 
@@ -60,20 +62,10 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<Null> logout() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('username', null);
-
-    setState(() {
-      name = '';
-      isLoggedIn = false;
-    });
-  }
-
   Future<List> loginUser() async {
     if (_formKey.currentState.validate()) {
       final response = await http.post(
-          'http://192.168.64.2/Projects/ncomic/dataHandling/loginUsers.php',
+          'http://bad-event.com/ncomic/dataHandling/loginUsers.php',
           body: {
             'numUser': _numberController.text,
             'passUser': _passwordController.text,
@@ -122,11 +114,9 @@ class _LoginScreenState extends State<LoginScreen> {
           paysUser = dataUser[0]['paysUser'];
           naissanceUser = dataUser[0]['naissanceUser'];
           emailUser = dataUser[0]['emailUser'];
-
-          isLoggedIn = true;
           message = 'Connexion réussie';
+          isLoggedIn = true;
         });
-
         print(idUser);
         print(name);
         print(pointUser);
@@ -134,15 +124,14 @@ class _LoginScreenState extends State<LoginScreen> {
         print(paysUser);
         print(naissanceUser);
         print(emailUser);
-
         Navigator.of(context).pushReplacementNamed(TabScreen.routeName);
-
         _nameController.clear();
         _numberController.clear();
         _passwordController.clear();
       } else {
         setState(() {
           message = 'Identifiants incorrects';
+          isLoggedIn = false;
         });
         Fluttertoast.showToast(
           msg: message,
@@ -160,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void addUser() async {
     if (_formKey.currentState.validate()) {
       final response = await http.post(
-        'http://192.168.64.2/Projects/ncomic/dataHandling/addUsers.php',
+        'http://bad-event.com/ncomic/dataHandling/addUsers.php',
         body: {
           'nomUser': _nameController.text,
           'numUser': _numberController.text,
@@ -170,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (response.statusCode == 200) {
         message = 'Inscription réussie';
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               shape: RoundedRectangleBorder(),
@@ -285,31 +274,40 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             height: 20,
                           ),
-
                           SizedBox(
                             height: 20,
                           ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: RaisedButton(
-                                  color: Theme.of(context).errorColor,
-                                  onPressed: () {
-                                    _isLogin ? loginUser() : addUser();
-                                  },
-                                  child: Text(
-                                    _isLogin ? 'Connexion' : 'Inscription',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17,
-                                    ),
-                                  ),
-                                  padding: EdgeInsets.all(15),
-                                ),
+                          if (isLoggedIn == true)
+                            Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.white,
                               ),
-                            ],
-                          ),
+                            ),
+                          if (isLoggedIn == false)
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: RaisedButton(
+                                    color: Theme.of(context).errorColor,
+                                    onPressed: () {
+                                      setState(() {
+                                        isLoggedIn = true;
+                                      });
+                                      _isLogin ? loginUser() : addUser();
+                                    },
+                                    child: Text(
+                                      _isLogin ? 'Connexion' : 'Inscription',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.all(15),
+                                  ),
+                                ),
+                              ],
+                            ),
                           SizedBox(
                             height: 10,
                           ),

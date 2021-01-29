@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ncomics/providers/Bd.dart';
 import 'package:ncomics/providers/bd_provider.dart';
 import 'package:ncomics/providers/cart.dart';
@@ -168,38 +169,44 @@ class _TabScreenState extends State<TabScreen> {
         //     : null,
       ),
       body: _page[_selectedPageIndex]['page'],
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Accueil',
-          ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.favorite),
-          //   label: 'Favoris',
-          // ),
-          BottomNavigationBarItem(
-            icon: Consumer<Cart>(
-              builder: (context, cart, ch) => Badge(
-                child: ch,
-                value: cart.itemCount.toString(),
-              ),
-              child: Icon(
-                Icons.shopping_cart,
-              ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: Colors.black, width: 0.09))),
+        child: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Accueil',
             ),
-            label: 'Panier',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_rounded),
-            label: 'Profil',
-          )
-        ],
-        onTap: _selectPage,
-        currentIndex: _selectedPageIndex,
-        elevation: 90,
-        selectedItemColor: Theme.of(context).errorColor,
-        unselectedItemColor: Theme.of(context).accentColor,
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.favorite),
+            //   label: 'Favoris',
+            // ),
+            BottomNavigationBarItem(
+              icon: Consumer<Cart>(
+                builder: (context, cart, ch) => Badge(
+                  child: ch,
+                  value: cart.itemCount.toString(),
+                ),
+                child: Icon(
+                  Icons.shopping_cart,
+                ),
+              ),
+              label: 'Panier',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_rounded),
+              label: 'Profil',
+            )
+          ],
+          onTap: _selectPage,
+          currentIndex: _selectedPageIndex,
+          elevation: 90,
+          selectedItemColor: Theme.of(context).errorColor,
+          unselectedItemColor: Theme.of(context).accentColor,
+          unselectedLabelStyle: GoogleFonts.comfortaa(),
+          selectedLabelStyle: GoogleFonts.comfortaa(),
+        ),
       ),
     );
   }
@@ -244,7 +251,8 @@ class DataSearch extends SearchDelegate<String> {
         .where((element) => element.titleBd.startsWith(query));
 
     return ListView.builder(
-      itemCount: products.where((element) => element.titleBd.startsWith(query)).length,
+      itemCount:
+          products.where((element) => element.titleBd.startsWith(query)).length,
       itemBuilder: (context, index) => ListTile(
         title: Text(products[index].titleBd),
       ),

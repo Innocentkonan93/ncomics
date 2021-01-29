@@ -111,9 +111,9 @@ class _AddPointsState extends State<AddPoints> {
                 height: 400,
                 child: CarouselSlider(
                   items: [
-                    carousselItem('12', 500, Colors.purple),
-                    carousselItem('12', 500, Colors.deepOrange),
-                    carousselItem('12', 500, Colors.brown),
+                    carousselItem('10', 5000, Colors.purple),
+                    carousselItem('30', 12000, Colors.deepOrange),
+                    carousselItem('100', 30000, Colors.brown),
                   ],
                   options: CarouselOptions(
                     height: 300,

@@ -23,9 +23,6 @@ class BdProvider with ChangeNotifier {
   }
 
 
-
-
-
   BandeDessinees findById(String id) {
     return _listbd.firstWhere((bd) => bd.idBd == id);
   }
