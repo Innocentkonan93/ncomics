@@ -149,6 +149,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             idBd,
                             prixBd,
                             titleBd,
+                            imageBd,
                           );
                         },
                       );

@@ -23,8 +23,6 @@ class _AppDrawerState extends State<AppDrawer> {
     final String userPoint = prefs.getString('userpoint');
     final String userName = prefs.getString('username');
     if (userPoint != null) {
-      print(userPoint);
-      print(userName);
       setState(() {
         userPt = userPoint;
         userNam = userName;
@@ -46,7 +44,7 @@ class _AppDrawerState extends State<AppDrawer> {
       child: Column(
         children: [
           Container(
-            height: 200,
+            height: 150,
             width: double.infinity,
             color: Theme.of(context).errorColor,
             child: SafeArea(
@@ -63,16 +61,19 @@ class _AppDrawerState extends State<AppDrawer> {
               ),
             ),
           ),
+          SizedBox(
+            height: 30,
+          ),
           ListTile(
             leading: Icon(
               Icons.shopping_bag_outlined,
-              size: 35,
+              size: 25,
               color: Theme.of(context).errorColor,
             ),
             title: Text(
               'Accueil',
               style: GoogleFonts.comfortaa(
-                  fontSize: 17, fontWeight: FontWeight.bold),
+                  fontSize: 14, fontWeight: FontWeight.bold),
             ),
             onTap: () {
               Navigator.pushReplacementNamed(context, TabScreen.routeName);
@@ -82,13 +83,13 @@ class _AppDrawerState extends State<AppDrawer> {
             builder: (context, orders, child) => ListTile(
               leading: Icon(
                 Icons.payment,
-                size: 33,
+                size: 23,
                 color: Theme.of(context).errorColor,
               ),
               title: Text(
-                'Vos achats (${orders.orders.length.toString()})',
+                'Vos BD (${orders.orders.length.toString()})',
                 style: GoogleFonts.comfortaa(
-                    fontSize: 17, fontWeight: FontWeight.bold),
+                    fontSize: 14, fontWeight: FontWeight.bold),
               ),
               // subtitle: Text('${orders.orders.length.toString()}'),
               onTap: () {
@@ -98,13 +99,10 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
           ),
           Spacer(),
-          Divider(
-            color: Theme.of(context).errorColor,
-          ),
           ListTile(
             leading: Icon(
               FontAwesomeIcons.wallet,
-              size: 30,
+              size: 20,
               color: Theme.of(context).errorColor,
             ),
             title: Row(
@@ -112,15 +110,17 @@ class _AppDrawerState extends State<AppDrawer> {
                 Text(
                   'Soldes',
                   style: GoogleFonts.comfortaa(
-                      fontSize: 17, fontWeight: FontWeight.bold),
+                      fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   width: 15,
                 ),
                 Text(
                   userPt + ' pt',
-                  style: GoogleFonts.comfortaa(
-                      fontSize: 22, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.quicksand(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),

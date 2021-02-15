@@ -6,6 +6,7 @@ import 'package:ncomics/screen/add_point.dart';
 import 'package:ncomics/widget/cart_item_list.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer' as developer;
 
 class CartScreen extends StatefulWidget {
   static const routeName = 'card-screen';
@@ -18,6 +19,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   int userPt = 0;
   String userNam = '';
+  List list = [];
 
   void getUserInfos() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -53,7 +55,9 @@ class _CartScreenState extends State<CartScreen> {
             ),
             actions: <Widget>[
               FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
                 child: Text('Annuler'),
               ),
               RaisedButton(
@@ -102,11 +106,14 @@ class _CartScreenState extends State<CartScreen> {
                     children: [
                       Text('Solde :'),
                       Spacer(),
-                      Text('$userPt', style: GoogleFonts.quicksand(
-                              fontSize: 16,
-                              color: Colors.red[700],
-                              fontWeight: FontWeight.bold,
-                            ),),
+                      Text(
+                        '$userPt',
+                        style: GoogleFonts.quicksand(
+                          fontSize: 16,
+                          color: Colors.red[700],
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -152,18 +159,21 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     color: Theme.of(context).errorColor,
                     shape: StadiumBorder(),
-                    onPressed: cart.items.length == 0 ? null : () {
-                      if (cart.totalAmount > userPt) {
-                        showD(context);
-                      } else {
-                        Provider.of<Orders>(context, listen: false).addOrder(
-                          cart.items.values.toList(),
-                          cart.totalAmount,
-                        );
-                        print(cart.totalAmount);
-                        cart.clearCart();
-                      }
-                    },
+                    onPressed: cart.items.length == 0
+                        ? null
+                        : () {
+                            if (cart.totalAmount > userPt) {
+                              list.addAll(cart.items.values.toList());
+                              showD(context);
+                            } else {
+                              Provider.of<Orders>(context, listen: false)
+                                  .addOrder(
+                                cart.items.values.toList(),
+                                cart.totalAmount,
+                              );
+                              cart.clearCart();
+                            }
+                          },
                   ),
                 ],
               ),
@@ -172,28 +182,34 @@ class _CartScreenState extends State<CartScreen> {
               ),
               Divider(),
               Expanded(
-                child: ListView.builder(
-                  itemCount: cart.items.length,
-                  itemBuilder: (ctx, i) => CartItemList(
-                    cart.items.keys.toList()[i],
-                    cart.items.values.toList()[i].id,
-                    cart.items.values.toList()[i].title,
-                    cart.items.values.toList()[i].price,
-                    cart.items.values.toList()[i].quantity,
-                  ),
-                ),
+                child: cart.items.length != 0
+                    ? ListView.builder(
+                        itemCount: cart.items.length,
+                        itemBuilder: (ctx, i) => CartItemList(
+                          cart.items.keys.toList()[i],
+                          cart.items.values.toList()[i].id,
+                          cart.items.values.toList()[i].title,
+                          cart.items.values.toList()[i].price,
+                          cart.items.values.toList()[i].quantity,
+                        ),
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.25,
+                            child: Image.asset('assets/images/zzz.png'),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Votre panier est vide !',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // IconButton(
-                  //   icon: Icon(Icons.close),
-                  //   onPressed: () {
-                  //     Navigator.of(context).pop();
-                  //   },
-                  // ),
-                ],
-              )
             ],
           ),
         ),

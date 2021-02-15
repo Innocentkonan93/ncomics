@@ -5,12 +5,14 @@ class CartItem {
   final String title;
   final int quantity;
   final double price;
+  final String imageUrl;
 
   CartItem({
     @required this.id,
     @required this.title,
     @required this.quantity,
     @required this.price,
+    this.imageUrl,
   });
 }
 
@@ -37,6 +39,7 @@ class Cart with ChangeNotifier {
     String productId,
     String price,
     String title,
+    String imageUrl,
   ) {
     if (_items.containsKey(productId)) {
       // change quantity...
@@ -47,6 +50,7 @@ class Cart with ChangeNotifier {
           title: existingCartItem.title,
           price: existingCartItem.price,
           quantity: existingCartItem.quantity,
+          imageUrl: existingCartItem.imageUrl,
           //quantity: existingCartItem.quantity + 1,
         ),
       );

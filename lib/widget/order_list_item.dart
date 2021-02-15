@@ -21,7 +21,7 @@ class _OrderListItemState extends State<OrderListItem> {
       child: Column(
         children: [
           ListTile(
-            title: Text('${widget.order.amount}'),
+            title: Text('${widget.order.id}'),
             subtitle: Text(
                 DateFormat('dd MM yyyy hh:mm').format(widget.order.dateTime)),
             trailing: IconButton(
@@ -52,10 +52,12 @@ class _OrderListItemState extends State<OrderListItem> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text('${prod.quantity} x ${prod.price}',
-                              style: TextStyle(
-                                fontSize: 15,
-                              )),
+                          Text(
+                            '${prod.quantity} x ${prod.price}',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
                         ],
                       ),
                     )

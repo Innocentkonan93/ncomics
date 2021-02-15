@@ -14,18 +14,20 @@ class ProductsGrid extends StatelessWidget {
     final productsData = Provider.of<BdProvider>(context);
     final products = productsData.listbd;
     return isGrid
-        ? GridView.builder(
-            padding: const EdgeInsets.all(20.0),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 2 / 3.8,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 25,
-            ),
-            itemCount: products.length,
-            itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-              value: products[i],
-              child: ProductGridItem(),
+        ? Scrollbar(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(20.0),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 2 / 3.8,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 25,
+              ),
+              itemCount: products.length,
+              itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+                value: products[i],
+                child: ProductGridItem(),
+              ),
             ),
           )
         : ListView.builder(

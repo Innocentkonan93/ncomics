@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -58,9 +59,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<List> getCat() async {
-    final res = await http.get(
-        "http://bad-event.com/ncomic/dataHandling/getCategory.php");
-    return json.decode(res.body);
+    try {
+      final res = await http
+          .get("http://bad-event.com/ncomic/dataHandling/getCategory.php");
+      return json.decode(res.body);
+    } on SocketException catch (e) {
+      throw SocketException(e.toString());
+    } on FormatException catch (_) {
+      throw FormatException("Unable to process the data");
+    } catch (e) {
+      throw e;
+    }
   }
 
   @override
@@ -92,95 +101,99 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
-                  child: Text(
-                    'Nouveautés',
-                    style: GoogleFonts.comfortaa(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Consumer<BdProvider>(
-              builder: (_, image, ___) => SliderItem(),
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
-                  child: Text(
-                    'Categories',
-                    style: GoogleFonts.comfortaa(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Consumer<CatProvider>(
-                  builder: (context, catPrvider, child) {
-                    return catPrvider.isProcessing
-                        ? CircularProgressIndicator()
-                        : CategoryList();
-                  },
-                ),
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Scrollbar(
+        isAlwaysShown: true,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 2),
+              // Row(
+              //   children: [
+              //     Padding(
+              //       padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
+              //       child: Text(
+              //         'Nouveautés',
+              //         style: GoogleFonts.comfortaa(
+              //           fontSize: 17,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              Consumer<BdProvider>(
+                builder: (_, image, ___) => SliderItem(),
+              ),
+              SizedBox(height: 5),
+              Row(
                 children: [
-                  Text(
-                    'Recommandations',
-                    style: GoogleFonts.comfortaa(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 0, 10),
+                    child: Text(
+                      'Categories',
+                      style: GoogleFonts.comfortaa(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  IconButton(
-                    icon: !isGrid
-                        ? Icon(
-                            Icons.grid_view,
-                            size: 22,
-                            color: Theme.of(context).errorColor,
-                          )
-                        : Icon(
-                            Icons.view_list,
-                            size: 25,
-                            color: Theme.of(context).errorColor,
-                          ),
-                    onPressed: () {
-                      setState(() {
-                        isGrid = !isGrid;
-                      });
-                    },
-                  )
                 ],
               ),
-            ),
-            Container(
-              height: 500,
-              child: Consumer<BdProvider>(
-                builder: (_, bdProvider, __) {
-                  return bdProvider.isProcessing
-                      ? Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : ProductsGrid(isGrid);
+              Consumer<CatProvider>(
+                builder: (context, catPrvider, child) {
+                  return catPrvider.isProcessing
+                      ? CircularProgressIndicator()
+                      : CategoryList();
                 },
               ),
-            ),
-          ],
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Recommandations',
+                      style: GoogleFonts.comfortaa(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    IconButton(
+                      icon: !isGrid
+                          ? Icon(
+                              Icons.grid_view,
+                              size: 22,
+                              color: Theme.of(context).errorColor,
+                            )
+                          : Icon(
+                              Icons.view_list,
+                              size: 25,
+                              color: Theme.of(context).errorColor,
+                            ),
+                      onPressed: () {
+                        setState(() {
+                          isGrid = !isGrid;
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: Consumer<BdProvider>(
+                  builder: (_, bdProvider, __) {
+                    return bdProvider.isProcessing
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ProductsGrid(isGrid);
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

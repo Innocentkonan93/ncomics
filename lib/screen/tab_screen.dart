@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ncomics/providers/Bd.dart';
 import 'package:ncomics/providers/bd_provider.dart';
 import 'package:ncomics/providers/cart.dart';
 import 'package:ncomics/screen/cart_screen.dart';
+import 'package:ncomics/screen/myComics_screen.dart';
 
 import 'package:ncomics/screen/home_screen.dart';
 import 'package:ncomics/screen/login/login_screen.dart';
+import 'package:ncomics/screen/product_detail_screen.dart';
 
 import 'package:ncomics/screen/profil_screen.dart';
 import 'package:ncomics/widget/appDrawer.dart';
 import 'package:ncomics/widget/badge.dart';
-import 'package:ncomics/widget/product_grid_item.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,8 +36,8 @@ class _TabScreenState extends State<TabScreen> {
   void initState() {
     _page = [
       {'page': HomeScreen(), 'title': 'Accueil'},
-      //{'page': FavoryScreen(), 'title': 'Favoris'},
       {'page': CartScreen(), 'title': 'Panier'},
+      {'page': MyComics(), 'title': 'Mes BD'},
       {'page': ProfilScreen(), 'title': 'Profil'},
     ];
 
@@ -100,8 +102,8 @@ class _TabScreenState extends State<TabScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              Icons.search,
-              size: 25,
+              FontAwesomeIcons.search,
+              size: 17,
               color: Colors.white,
             ),
             onPressed: () {
@@ -111,62 +113,7 @@ class _TabScreenState extends State<TabScreen> {
               // });
             },
           ),
-          // Consumer<Cart>(
-          //   builder: (context, cart, ch) => Badge(
-          //     child: ch,
-          //     value: cart.itemCount.toString(),
-          //   ),
-          //   child: IconButton(
-          //     icon: Icon(
-          //       Icons.shopping_bag,
-          //       color: Theme.of(context).accentColor,
-          //     ),
-          //     onPressed: () {
-          //       Navigator.of(context).pushNamed(
-          //         CartScreen.routeName,
-          //       );
-          //     },
-          //   ),
-          // ),
         ],
-        // bottom: searched
-        //     ? PreferredSize(
-        //         child: Container(
-        //           child: Container(
-        //             margin: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-        //             height: 37,
-        //             decoration: BoxDecoration(
-        //                 //border: Border.all(color: Colors.grey),
-        //                 color: Colors.white,
-        //                 borderRadius: BorderRadius.circular(17)),
-        //             child: Row(
-        //               crossAxisAlignment: CrossAxisAlignment.start,
-        //               children: [
-        //                 Expanded(
-        //                   child: TextFormField(
-        //                     textAlign: TextAlign.center,
-        //                     decoration: InputDecoration(
-        //                       hintText: 'Recherchez',
-        //                       hintStyle: TextStyle(),
-        //                       border: InputBorder.none,
-        //                     ),
-        //                   ),
-        //                 ),
-        //                 SizedBox(
-        //                   width: 7,
-        //                 ),
-        //                 IconButton(
-        //                   icon: Icon(Icons.search,
-        //                       size: 26, color: Colors.grey.withOpacity(0.4)),
-        //                   onPressed: () {},
-        //                 ),
-        //               ],
-        //             ),
-        //           ),
-        //         ),
-        //         preferredSize: Size(double.infinity, 50),
-        //       )
-        //     : null,
       ),
       body: _page[_selectedPageIndex]['page'],
       bottomNavigationBar: Container(
@@ -175,13 +122,12 @@ class _TabScreenState extends State<TabScreen> {
         child: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(
+                FontAwesomeIcons.home,
+                size: 20,
+              ),
               label: 'Accueil',
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.favorite),
-            //   label: 'Favoris',
-            // ),
             BottomNavigationBarItem(
               icon: Consumer<Cart>(
                 builder: (context, cart, ch) => Badge(
@@ -190,9 +136,17 @@ class _TabScreenState extends State<TabScreen> {
                 ),
                 child: Icon(
                   Icons.shopping_cart,
+                  size: 24,
                 ),
               ),
               label: 'Panier',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                FontAwesomeIcons.book,
+                size: 20,
+              ),
+              label: 'Mes BD',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_rounded),
@@ -215,10 +169,11 @@ class _TabScreenState extends State<TabScreen> {
 class DataSearch extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) {
-    final product = Provider.of<BdProvider>(context).listbd;
+    final listBd = Provider.of<BdProvider>(context).listbd;
+    final recentList = Provider.of<BdProvider>(context).listbd;
     return [
       IconButton(
-        icon: Icon(Icons.close),
+        icon: Icon(Icons.clear),
         onPressed: () {
           query = "";
         },
@@ -240,22 +195,114 @@ class DataSearch extends SearchDelegate<String> {
   }
 
   @override
-  Widget buildResults(BuildContext context) {}
+  Widget buildResults(BuildContext context) {
+    final listBd = Provider.of<BdProvider>(context).listbd;
+    final recentList = Provider.of<BdProvider>(context).listbd;
+    final suggestionList = query.isEmpty
+        ? recentList
+        : listBd
+            .where((element) => element.titleBd.toLowerCase().startsWith(query))
+            .toList();
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (ctx, i) {
+        return ListTile(
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              ProductDetailScreen.routeName,
+              arguments: suggestionList[i].idBd,
+            );
+          },
+          leading: Icon(Icons.book_outlined),
+          title: RichText(
+            text: TextSpan(
+                text: suggestionList[i].titleBd.substring(0, query.length),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+                children: [
+                  TextSpan(
+                    text: suggestionList[i].titleBd.substring(query.length),
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 18,
+                    ),
+                  )
+                ]),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final productsData = Provider.of<BdProvider>(context);
-    final products = productsData.listbd;
-
-    final producths = productsData.listbd
-        .where((element) => element.titleBd.startsWith(query));
-
+    final listBd = Provider.of<BdProvider>(context).listbd;
+    final recentList = Provider.of<BdProvider>(context).listbd;
+    final suggestionList = query.isEmpty
+        ? recentList
+        : listBd
+            .where((element) => element.titleBd.toLowerCase().startsWith(query))
+            .toList();
     return ListView.builder(
-      itemCount:
-          products.where((element) => element.titleBd.startsWith(query)).length,
-      itemBuilder: (context, index) => ListTile(
-        title: Text(products[index].titleBd),
-      ),
+      itemCount: suggestionList.length,
+      itemBuilder: (ctx, i) {
+        return ListTile(
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              ProductDetailScreen.routeName,
+              arguments: suggestionList[i].idBd,
+            );
+          },
+          leading: Icon(
+            Icons.book_outlined,
+            color: Colors.black,
+          ),
+          title: RichText(
+            text: TextSpan(
+                text: suggestionList[i].titleBd.substring(0, query.length),
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+                children: [
+                  TextSpan(
+                    text: suggestionList[i].titleBd.substring(query.length),
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 18,
+                    ),
+                  )
+                ]),
+          ),
+        );
+      },
     );
   }
 }
+
+// final productsData = Provider.of<BdProvider>(context);
+//     final products = productsData.listbd;
+
+//     final producths = productsData.listbd
+//         .where((element) => element.titleBd.contains(query))
+//         .toList();
+
+//     return ListView.builder(
+//       itemCount: producths.length,
+//       itemBuilder: (context, index) => ListTile(
+//         title: GestureDetector(
+//           onTap: () {
+//             Navigator.pushNamed(
+//               context,
+//               ProductDetailScreen.routeName,
+//               arguments: products[index].idBd,
+//             );
+//           },
+//           child: Text(products[index].titleBd),
+//         ),
+//       ),
+//     );

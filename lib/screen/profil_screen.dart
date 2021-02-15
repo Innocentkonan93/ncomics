@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ncomics/screen/login/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'login/edit_user_info.dart';
 
 class ProfilScreen extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class ProfilScreen extends StatefulWidget {
 }
 
 class _ProfilScreenState extends State<ProfilScreen> {
+  String userId = '';
   String userPt = '';
   String userNam = '';
   String userPays = '';
@@ -21,10 +23,12 @@ class _ProfilScreenState extends State<ProfilScreen> {
   void initState() {
     super.initState();
     getUserInfos();
+    setState(() {});
   }
 
   void getUserInfos() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String userID = prefs.getString('userid');
     final String userPoint = prefs.getString('userpoint');
     final String userName = prefs.getString('username');
     final String userNaissance = prefs.getString('usernaissance');
@@ -33,7 +37,9 @@ class _ProfilScreenState extends State<ProfilScreen> {
     if (userPoint != null) {
       print(userPoint);
       print(userName);
+      print('user ID: $userID');
       setState(() {
+        userId = userID;
         userPt = userPoint;
         userNam = userName;
         userNaiss = userNaissance;
@@ -50,67 +56,13 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
     prefs.setString('username', null);
     prefs.setString('userpoint', null);
-    Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(LoginScreen.routeName, (route) => false);
+    //Navigator.pushNamedAndRemoveUntil(context, '/calendar', ModalRoute.withName('/'));
     // setState(() {
     //   name = '';
     //   isLoggedIn = false;
     // });
-  }
-
-  void showModal() {
-    bool edit = false;
-    showModalBottomSheet<void>(
-      isDismissible: true,
-      context: (context),
-      builder: (context) {
-        return SafeArea(
-          child: Container(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RaisedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        height: 3,
-                        width: 100,
-                        color: Colors.black12,
-                      ),
-                      color: Colors.transparent,
-                      elevation: 0.0,
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          edit = !edit;
-                        });
-                      },
-                      child: Text('Modifier'),
-                    )
-                  ],
-                ),
-                Expanded(
-                  child: ListView(
-                    children: [],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -165,7 +117,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
                     ),
                     profilItem(
                       'Votre email',
-                      subTitle: userEmail,
+                      subTitle:
+                          userEmail == null ? 'Non renseignée' : userEmail,
                     ),
                   ],
                 ),
@@ -204,7 +157,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => EditPassWord(),
+                            builder: (context) => EditPassWord(userId),
                           ),
                         );
                       },
@@ -217,9 +170,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => EditEmail(),
+                            builder: (context) => EditEmail(userId),
                           ),
                         );
+                        print(userId);
                       },
                       subTitle: '',
                       trailing: Icons.arrow_forward_ios,
@@ -230,7 +184,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => EditNumber(),
+                            builder: (context) => EditNumber(userId),
                           ),
                         );
                       },
@@ -361,105 +315,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
               trailing,
               size: 14,
               color: Theme.of(context).errorColor,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  
-}
-
-class EditPassWord extends StatelessWidget {
-  final _passController = TextEditingController();
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          FlatButton(
-              onPressed: () {},
-              child: Text(
-                'Modifier',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ))
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              decoration: InputDecoration(hintText: 'Nouveau mot de passe'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// Edit Email
-class EditEmail extends StatelessWidget {
-  final _emailController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          FlatButton(
-              onPressed: () {},
-              child: Text(
-                'Modifier',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ))
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              decoration: InputDecoration(hintText: 'Nouvelle adresse mail'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// Edit Number
-class EditNumber extends StatelessWidget {
-  final _numberController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          FlatButton(
-              onPressed: () {},
-              child: Text(
-                'Modifier',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ))
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              decoration: InputDecoration(hintText: 'Nouveau numero'),
             ),
           ],
         ),

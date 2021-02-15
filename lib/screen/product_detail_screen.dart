@@ -131,42 +131,46 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ],
                       ),
                       SizedBox(height: 18),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          elevation: 10,
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * 0.60,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                    'http://bad-event.com/ncomic/uploads/${loadProduct.imageBd}'),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Chip(
-                                        label: Text(
-                                          'FR',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        backgroundColor:
-                                            Colors.black.withOpacity(0.7),
-                                      ),
-                                    ),
-                                  ],
+                      Hero(
+                        tag: 'Bd-${loadProduct.idBd}',
+                        transitionOnUserGestures: true,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            elevation: 10,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.55,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      'http://bad-event.com/ncomic/uploads/${loadProduct.imageBd}'),
+                                  fit: BoxFit.cover,
                                 ),
-                              ],
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Chip(
+                                          label: Text(
+                                            'FR',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          backgroundColor:
+                                              Colors.black.withOpacity(0.7),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -191,66 +195,137 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           children: [
                             Expanded(
                               child: Consumer<Cart>(
-                                builder: (context, cart, child) =>
-                                    GestureDetector(
-                                  onTap: () {
-                                    ScaffoldMessenger.of(context)
-                                        .hideCurrentSnackBar();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Produit ajouté'),
-                                        duration: Duration(seconds: 2),
-                                        backgroundColor:
-                                            Colors.black.withOpacity(0.8),
-                                        action: SnackBarAction(
-                                          label: 'Annuler',
-                                          onPressed: () {
-                                            cart.removeSingleItem(
-                                                loadProduct.idBd);
-                                          },
-                                          textColor:
-                                              Theme.of(context).errorColor,
-                                        ),
-                                      ),
-                                    );
-                                    cart.addItem(
-                                      loadProduct.idBd,
-                                      loadProduct.prixBd,
-                                      loadProduct.titleBd,
-                                    );
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).errorColor,
-                                      borderRadius: BorderRadius.circular(3),
-                                    ),
-                                    height: 50,
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Ajouter',
-                                            style: GoogleFonts.quicksand(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
+                                builder: (context, cart, child) => !cart.items
+                                        .containsKey(loadProduct.idBd)
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text('Produit ajouté'),
+                                              duration: Duration(seconds: 2),
+                                              backgroundColor:
+                                                  Colors.black.withOpacity(0.8),
+                                              action: SnackBarAction(
+                                                label: 'Annuler',
+                                                onPressed: () {
+                                                  cart.removeSingleItem(
+                                                      loadProduct.idBd);
+                                                },
+                                                textColor: Theme.of(context)
+                                                    .errorColor,
+                                              ),
+                                            ),
+                                          );
+                                          cart.addItem(
+                                            loadProduct.idBd,
+                                            loadProduct.prixBd,
+                                            loadProduct.titleBd,
+                                            loadProduct.imageBd,
+                                          );
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).errorColor,
+                                            borderRadius:
+                                                BorderRadius.circular(3),
+                                          ),
+                                          height: 40,
+                                          child: Center(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                                  decoration: BoxDecoration(
+                                                    border: Border(
+                                                      right: BorderSide(
+                                                        width: 2,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: Text(
+                                                    loadProduct.prixBd == '0'
+                                                        ? 'Gratuit'
+                                                        : loadProduct.prixBd +
+                                                            ' Points',
+                                                    style:
+                                                        GoogleFonts.quicksand(
+                                                      fontSize: 19,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  'Ajouter',
+                                                  style: GoogleFonts.quicksand(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Icon(
+                                                  Icons.add_shopping_cart,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 10,
+                                        ),
+                                      )
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .errorColor
+                                              .withOpacity(0.2),
+                                          borderRadius:
+                                              BorderRadius.circular(3),
+                                        ),
+                                        height: 40,
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Ajouté',
+                                                style: GoogleFonts.quicksand(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Icon(
+                                                Icons.done,
+                                                color: Colors.white,
+                                              ),
+                                            ],
                                           ),
-                                          Icon(
-                                            Icons.add_shopping_cart,
-                                            color: Colors.white,
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
                               ),
+                            ),
+                            SizedBox(
+                              height: 40,
+                              width: MediaQuery.of(context).size.width * 0.02,
                             ),
                             GestureDetector(
                               onTap: () {
@@ -259,52 +334,49 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 });
                                 print(loadProduct.isRating);
                                 ratingPost();
-                                Flushbar(
-                                    flushbarPosition: FlushbarPosition.TOP,
-                                    title: "Vote",
-                                    duration: Duration(seconds: 5),
-                                    messageText: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Vote enregistré",
-                                          style: GoogleFonts.quicksand(
-                                            color: Colors.green,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                        Icon(
-                                          FontAwesomeIcons.checkCircle,
-                                          color: Colors.white,
-                                          size: 33,
-                                        ),
-                                      ],
-                                    ),
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    borderRadius: 8)
-                                  ..show(context);
-                                // Fluttertoast.showToast(
-                                //     msg: 'Note enregistré',
-                                //     backgroundColor:
-                                //         Colors.black.withOpacity(0.7),
-                                //     textColor: Colors.white,
-                                //     timeInSecForIosWeb: 3,
-                                //     toastLength: Toast.LENGTH_LONG,
-                                //     fontSize: 13);
+                                Fluttertoast.showToast(
+                                    msg: 'Note enregistré',
+                                    backgroundColor:
+                                        Colors.black.withOpacity(0.7),
+                                    textColor: Colors.white,
+                                    timeInSecForIosWeb: 3,
+                                    toastLength: Toast.LENGTH_LONG,
+                                    fontSize: 13);
                               },
                               child: Container(
-                                margin: EdgeInsets.only(left: 5),
+                                height: 40,
                                 decoration: BoxDecoration(
-                                  color: Colors.blueAccent[700],
                                   borderRadius: BorderRadius.circular(3),
+                                  color: Colors.grey[300],
                                 ),
-                                height: 50,
-                                width: 80,
-                                child: Icon(
-                                  FontAwesomeIcons.solidThumbsUp,
-                                  color: Colors.white,
+                                //width: MediaQuery.of(context).size.width * 0.2,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                      child: Icon(
+                                        FontAwesomeIcons.solidThumbsUp,
+                                        color: Colors.blueAccent[700],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.02,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                      child: Icon(
+                                        FontAwesomeIcons.solidThumbsDown,
+                                        color: Colors.blueAccent[700],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             )
@@ -312,6 +384,39 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       ),
                       Divider(),
+                      if (loadProduct.resumeBd != null)
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Resumé',
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                      if (loadProduct.resumeBd != null)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                child: Text(
+                                  loadProduct.resumeBd,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.brown,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       Row(
                         children: [
                           Padding(
@@ -345,14 +450,47 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             'http://bad-event.com/ncomic/uploadedImage/${ss.data[i]['fileName']}'),
                                       ),
                                       onTap: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) => ImageViewer(
-                                            image: ss.data[i]['fileName'],
-                                            id: ss.data[i]['idImageBd'],
-                                            length: ss.data.length,
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => Scaffold(
+                                              appBar: AppBar(
+                                                backgroundColor: Colors.black,
+                                                elevation: 0.0,
+                                              ),
+                                              body: PhotoViewGallery.builder(
+                                                loadingBuilder: (context,
+                                                        event) =>
+                                                    CircularProgressIndicator(),
+                                                scrollPhysics:
+                                                    const BouncingScrollPhysics(),
+                                                builder: (BuildContext context,
+                                                    int index) {
+                                                  return PhotoViewGalleryPageOptions(
+                                                    imageProvider: NetworkImage(
+                                                        'http://bad-event.com/ncomic/uploadedImage/${ss.data[index]['fileName']}'),
+                                                    initialScale:
+                                                        PhotoViewComputedScale
+                                                                .contained *
+                                                            1,
+                                                    minScale:
+                                                        PhotoViewComputedScale
+                                                                .contained *
+                                                            1,
+                                                    maxScale:
+                                                        PhotoViewComputedScale
+                                                                .covered *
+                                                            2,
+                                                    heroAttributes:
+                                                        PhotoViewHeroAttributes(
+                                                      tag: index,
+                                                    ),
+                                                  );
+                                                },
+                                                itemCount: ss.data.length,
+                                              ),
+                                            ),
                                           ),
-                                        ));
+                                        );
                                       },
                                     );
                                   },
@@ -366,68 +504,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           },
                         ),
                       ),
-                      // Row(
-                      //   children: [
-                      //     Padding(
-                      //       padding: const EdgeInsets.all(8.0),
-                      //       child: Text(
-                      //         'Commentaire',
-                      //         style: TextStyle(
-                      //             fontSize: 22, fontWeight: FontWeight.bold),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      // SizedBox(height: 10),
-                      // Container(
-                      //   margin: EdgeInsets.symmetric(
-                      //     horizontal: 15,
-                      //   ),
-                      //   height: 100,
-                      //   width: double.infinity,
-                      //   decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.circular(3),
-                      //     color: Colors.white,
-                      //   ),
-                      //   child: Text('ghgdf'),
-                      // ),
+                      Divider(),
+                      if (loadProduct.prixBd == '0' ||
+                          loadProduct.statutBd != null)
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Episode',
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ImageViewer extends StatelessWidget {
-  final String id;
-  final String image;
-  final int length;
-  ImageViewer({this.image, this.id, this.length});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        elevation: 0.0,
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: PhotoViewGallery.builder(
-          scrollPhysics: const BouncingScrollPhysics(),
-          builder: (BuildContext context, int index) {
-            return PhotoViewGalleryPageOptions(
-              imageProvider: NetworkImage(
-                  'http://bad-event.com/ncomic/uploadedImage/${image}'),
-              initialScale: PhotoViewComputedScale.contained * 1,
-              heroAttributes: PhotoViewHeroAttributes(tag: index),
-            );
-          },
-          itemCount: length,
         ),
       ),
     );

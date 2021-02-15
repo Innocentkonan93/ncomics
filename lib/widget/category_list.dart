@@ -19,7 +19,7 @@ class CategoryList extends StatelessWidget {
     final category = Provider.of<CatProvider>(context);
     final catData = category.categoryList;
     return Container(
-      height: 40,
+      height: 50,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: catData.length,
@@ -27,12 +27,10 @@ class CategoryList extends StatelessWidget {
           value: catData[index],
           child: Container(
             margin: EdgeInsets.only(left: 20),
-            child: CategoryListItem(),
-            decoration: BoxDecoration(
-
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: _colors[index])
-            ),
+            child: CategoryListItem(_colors[index]),
+            //   decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(10),
+            //       border: Border.all(color: _colors[index])),
           ),
         ),
       ),

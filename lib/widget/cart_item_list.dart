@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ncomics/providers/cart.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CartItemList extends StatefulWidget {
   final String productId;
@@ -22,8 +23,34 @@ class CartItemList extends StatefulWidget {
 }
 
 class _CartItemListState extends State<CartItemList> {
+  String userId;
+  String productId;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserInfos();
+    setState(() {});
+  }
+
+  void getUserInfos() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String userID = prefs.getString('userid');
+    final String userPoint = prefs.getString('userpoint');
+    final String userName = prefs.getString('username');
+
+    if (userPoint != null) {
+      setState(() {
+        userId = userID;
+      });
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget.title);
+    print(widget.id);
     return Dismissible(
       key: ValueKey(widget.productId),
       background: Container(
@@ -49,7 +76,10 @@ class _CartItemListState extends State<CartItemList> {
         ),
         child: ListTile(
           trailing: IconButton(
-            icon: Icon(Icons.delete_forever, color: Colors.orange[900],),
+            icon: Icon(
+              Icons.delete_forever,
+              color: Theme.of(context).errorColor,
+            ),
             onPressed: () {
               showDialog(
                 context: context,
@@ -91,8 +121,15 @@ class _CartItemListState extends State<CartItemList> {
             ),
             backgroundColor: Theme.of(
               context,
-            ).primaryColor,
+            ).errorColor,
           ),
+          onTap: () {
+            setState(() {
+              productId = widget.title;
+              print(productId);
+              print('user id' + userId);
+            });
+          },
         ),
       ),
       confirmDismiss: (direction) {

@@ -174,11 +174,11 @@ class Items extends StatelessWidget {
                   itemBuilder: (context, i) {
                     return GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, ShowIamge.routeName,
-                            arguments: {
-                              'fileName': list[i]['fileName'],
-                              'prixBd': list[i]['prixBd'],
-                            });
+                        // Navigator.pushNamed(context, ShowIamge.routeName,
+                        //     arguments: {
+                        //       'fileName': list[i]['fileName'],
+                        //       'prixBd': list[i]['prixBd'],
+                        //     });
                       },
                       child: Container(
                         margin: EdgeInsets.fromLTRB(20, 20, 0, 10),

@@ -5,9 +5,10 @@ class BandeDessinees with ChangeNotifier {
   String titleBd;
   String imageBd;
   String nomAuteur;
+  String resumeBd;
   String prixBd;
   String categorieBd;
-  Null statutBd;
+  String statutBd;
   String isRating;
   String ratingBd;
   String creatAt;
@@ -17,25 +18,27 @@ class BandeDessinees with ChangeNotifier {
 
   BandeDessinees({
     this.idBd,
-      this.titleBd,
-      this.imageBd,
-      this.nomAuteur,
-      this.prixBd,
-      this.categorieBd,
-      this.statutBd,
-      this.isRating,
-      this.ratingBd,
-      this.creatAt,
-      this.idUser,
+    this.titleBd,
+    this.imageBd,
+    this.nomAuteur,
+    this.resumeBd,
+    this.prixBd,
+    this.categorieBd,
+    this.statutBd,
+    this.isRating,
+    this.ratingBd,
+    this.creatAt,
+    this.idUser,
     this.isFavorite = false,
     this.likeCount = 0,
   });
 
   BandeDessinees.fromJson(Map<String, dynamic> json) {
-   idBd = json['idBd'];
+    idBd = json['idBd'];
     titleBd = json['titleBd'];
     imageBd = json['imageBd'];
     nomAuteur = json['nomAuteur'];
+    resumeBd = json['resumeBd'];
     prixBd = json['prixBd'];
     categorieBd = json['categorieBd'];
     statutBd = json['statutBd'];
@@ -47,10 +50,11 @@ class BandeDessinees with ChangeNotifier {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-   data['idBd'] = this.idBd;
+    data['idBd'] = this.idBd;
     data['titleBd'] = this.titleBd;
     data['imageBd'] = this.imageBd;
     data['nomAuteur'] = this.nomAuteur;
+    data['resumeBd'] = this.resumeBd;
     data['prixBd'] = this.prixBd;
     data['categorieBd'] = this.categorieBd;
     data['statutBd'] = this.statutBd;

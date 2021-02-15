@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ncomics/providers/Bd.dart';
+import 'dart:math';
 
 class BdProvider with ChangeNotifier {
   // declaration

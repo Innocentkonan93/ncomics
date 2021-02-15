@@ -18,6 +18,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).errorColor,
+        title: Text('Vos Achats'),
       ),
       drawer: AppDrawer(),
       body: orderData.orders.isNotEmpty

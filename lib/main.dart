@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:ncomics/providers/Bd.dart';
 import 'package:ncomics/providers/cart.dart';
 import 'package:ncomics/providers/bd_provider.dart';
 import 'package:ncomics/providers/cat_provider.dart';
+import 'package:ncomics/providers/download_provider.dart';
 
 import 'package:ncomics/providers/orders.dart';
 import 'package:ncomics/screen/add_point.dart';
@@ -20,8 +21,6 @@ import 'package:ncomics/screen/splash_screen.dart';
 import 'package:ncomics/screen/tab_screen.dart';
 
 import 'package:provider/provider.dart';
-
-
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,9 +48,13 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: Orders(),
+        ),
+        ChangeNotifierProvider.value(
+          value: FileDownloaderProvider(),
         )
       ],
       child: MaterialApp(
+        builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
         title: 'Ncomis',
         theme: ThemeData(
@@ -63,7 +66,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (ctx) => SplashScreen(),
           AddPoints.routeName: (ctx) => AddPoints(),
-          ShowIamge.routeName: (ctx) => ShowIamge(),
+          // ShowIamge.routeName: (ctx) => ShowIamge(),
           CartScreen.routeName: (ctx) => CartScreen(),
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           LoginScreen.routeName: (ctx) => LoginScreen(),
@@ -71,6 +74,7 @@ class MyApp extends StatelessWidget {
           TabScreen.routeName: (ctx) => TabScreen(),
           ByCategroyScreen.routeName: (ctx) => ByCategroyScreen()
         },
+        //
       ),
     );
   }
