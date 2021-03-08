@@ -7,7 +7,6 @@ class BdProvider with ChangeNotifier {
   bool _isProcessing = true;
   List<BandeDessinees> _listbd = [];
 
-
   // attribution
   bool get isProcessing => _isProcessing;
 
@@ -23,7 +22,6 @@ class BdProvider with ChangeNotifier {
     return _listbd.where((catList) => catList.categorieBd == id).toList();
   }
 
-
   BandeDessinees findById(String id) {
     return _listbd.firstWhere((bd) => bd.idBd == id);
   }
@@ -32,7 +30,6 @@ class BdProvider with ChangeNotifier {
     _listbd.where((element) => element.categorieBd == idcat);
     notifyListeners();
   }
-
 
   //fonction
 
@@ -44,11 +41,6 @@ class BdProvider with ChangeNotifier {
 
   setBdList(List<BandeDessinees> list) {
     _listbd = list;
-    notifyListeners();
-  }
-
-  addBdList(List<BandeDessinees> list) {
-    _listbd.addAll(list);
     notifyListeners();
   }
 

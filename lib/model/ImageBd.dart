@@ -1,14 +1,21 @@
 class ImageBd {
   String idImageBd;
-  String nameFile;
+  String fileName;
+  String numEpisode;
   String idBd;
   String creatAt;
 
-  ImageBd({this.idImageBd, this.nameFile, this.idBd, this.creatAt});
+  ImageBd(
+      {this.idImageBd,
+      this.fileName,
+      this.numEpisode,
+      this.idBd,
+      this.creatAt});
 
   ImageBd.fromJson(Map<String, dynamic> json) {
     idImageBd = json['idImageBd'];
-    nameFile = json['nameFile'];
+    fileName = json['fileName'];
+    numEpisode = json['numEpisode'];
     idBd = json['idBd'];
     creatAt = json['creatAt'];
   }
@@ -17,7 +24,8 @@ class ImageBd {
     final Map<String, dynamic> data = new Map<String, dynamic>();
 
     data['idImageBd'] = this.idImageBd;
-    data['nameFile'] = this.nameFile;
+    data['fileName'] = this.fileName;
+    data['numEpisode'] = this.numEpisode;
     data['idBd'] = this.idBd;
     data['creatAt'] = this.creatAt;
     return data;

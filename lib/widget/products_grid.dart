@@ -1,6 +1,6 @@
+
 import 'package:flutter/material.dart';
 import 'package:ncomics/providers/bd_provider.dart';
-import 'package:ncomics/widget/products_list_item.dart';
 import 'package:provider/provider.dart';
 import 'product_grid_item.dart';
 
@@ -13,29 +13,30 @@ class ProductsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final productsData = Provider.of<BdProvider>(context);
     final products = productsData.listbd;
-    return isGrid
+    return products.isNotEmpty
         ? Scrollbar(
             child: GridView.builder(
-              padding: const EdgeInsets.all(20.0),
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(12.0),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 2 / 3.8,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 25,
+                crossAxisCount: 3,
+                childAspectRatio: 2 / 3,
+                crossAxisSpacing: 3,
+                mainAxisSpacing: 15,
               ),
-              itemCount: products.length,
+              itemCount: 6,
               itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
                 value: products[i],
                 child: ProductGridItem(),
               ),
             ),
           )
-        : ListView.builder(
-            itemBuilder: (context, index) => ChangeNotifierProvider.value(
-              value: products[index],
-              child: ProductListItem(),
-            ),
-            itemCount: products.length,
-          );
+        : Center(
+            child: Container(
+            height: 200,
+            width: 200,
+            child: Image.asset('assets/images/404.png'),
+          ));
   }
 }

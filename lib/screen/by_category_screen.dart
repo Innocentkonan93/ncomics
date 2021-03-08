@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ncomics/providers/bd_provider.dart';
 import 'package:ncomics/providers/cart.dart';
-import 'package:ncomics/screen/cart_screen.dart';
+
 import 'package:ncomics/widget/badge.dart';
 import 'package:ncomics/widget/product_cat_grid.dart';
 
@@ -53,9 +53,9 @@ class ByCategroyScreen extends StatelessWidget {
                               size: 30,
                             ),
                             onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                CartScreen.routeName,
-                              );
+                              // Navigator.of(context).pushNamed(
+                              //   CartScreen.routeName,
+                              // );
                             },
                           ),
                         ),

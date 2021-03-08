@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ncomics/providers/bd_provider.dart';
-import 'package:ncomics/providers/cart.dart';
-import 'package:ncomics/screen/cart_screen.dart';
-import 'package:ncomics/screen/myComics_screen.dart';
+
+import 'package:ncomics/screen/compte_screen.dart';
+import 'package:ncomics/screen/mes_bd_screen.dart';
 
 import 'package:ncomics/screen/home_screen.dart';
 import 'package:ncomics/screen/login/login_screen.dart';
 import 'package:ncomics/screen/product_detail_screen.dart';
-
-import 'package:ncomics/screen/profil_screen.dart';
 import 'package:ncomics/widget/appDrawer.dart';
-import 'package:ncomics/widget/badge.dart';
+
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +26,7 @@ class _TabScreenState extends State<TabScreen> {
   int _selectedPageIndex = 0;
   bool searched = false;
   bool isEditing = false;
-  bool close = false;
+  bool close = true;
 
   String name;
   String point;
@@ -36,9 +34,8 @@ class _TabScreenState extends State<TabScreen> {
   void initState() {
     _page = [
       {'page': HomeScreen(), 'title': 'Accueil'},
-      {'page': CartScreen(), 'title': 'Panier'},
-      {'page': MyComics(), 'title': 'Mes BD'},
-      {'page': ProfilScreen(), 'title': 'Profil'},
+      {'page': MesBdScreen(), 'title': 'Mes BD'},
+      {'page': CompteScreen(), 'title': 'Compte'},
     ];
 
     autoLogIn();
@@ -100,19 +97,20 @@ class _TabScreenState extends State<TabScreen> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              FontAwesomeIcons.search,
-              size: 17,
-              color: Colors.white,
+          if (!close)
+            IconButton(
+              icon: Icon(
+                FontAwesomeIcons.search,
+                size: 17,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                showSearch(context: context, delegate: DataSearch());
+                // setState(() {
+                //   searched = !searched;
+                // });
+              },
             ),
-            onPressed: () {
-              showSearch(context: context, delegate: DataSearch());
-              // setState(() {
-              //   searched = !searched;
-              // });
-            },
-          ),
         ],
       ),
       body: _page[_selectedPageIndex]['page'],
@@ -129,19 +127,6 @@ class _TabScreenState extends State<TabScreen> {
               label: 'Accueil',
             ),
             BottomNavigationBarItem(
-              icon: Consumer<Cart>(
-                builder: (context, cart, ch) => Badge(
-                  child: ch,
-                  value: cart.itemCount.toString(),
-                ),
-                child: Icon(
-                  Icons.shopping_cart,
-                  size: 24,
-                ),
-              ),
-              label: 'Panier',
-            ),
-            BottomNavigationBarItem(
               icon: Icon(
                 FontAwesomeIcons.book,
                 size: 20,
@@ -150,7 +135,7 @@ class _TabScreenState extends State<TabScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_rounded),
-              label: 'Profil',
+              label: 'Compte',
             )
           ],
           onTap: _selectPage,

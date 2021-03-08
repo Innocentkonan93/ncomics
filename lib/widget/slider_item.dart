@@ -11,9 +11,9 @@ class _SliderItemState extends State<SliderItem> {
   Widget build(BuildContext context) {
     return CarouselSlider(
       options: CarouselOptions(
-        height: MediaQuery.of(context).size.height * 0.18,
+        height: MediaQuery.of(context).size.height * 0.22,
         aspectRatio: 1,
-        viewportFraction: 0.95,
+        viewportFraction: 1,
         initialPage: 0,
         enableInfiniteScroll: true,
         reverse: false,

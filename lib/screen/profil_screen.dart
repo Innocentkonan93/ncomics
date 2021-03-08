@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login/edit_user_info.dart';
 
 class ProfilScreen extends StatefulWidget {
+  static const routeName = 'profil-screen';
   @override
   _ProfilScreenState createState() => _ProfilScreenState();
 }
@@ -72,161 +73,155 @@ class _ProfilScreenState extends State<ProfilScreen> {
         height: MediaQuery.of(context).size.height,
         color: Colors.red.withOpacity(0.02),
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        child: Icon(Icons.person),
-                        radius: 55,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 0.3,
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Profil',
-                        style: GoogleFonts.quicksand(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Column(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    profilItem(
-                      'Votre nom',
-                      subTitle: userNam,
-                    ),
-                    profilItem(
-                      'Votre email',
-                      subTitle:
-                          userEmail == null ? 'Non renseignée' : userEmail,
+                    CircleAvatar(
+                      child: Icon(Icons.person),
+                      radius: 55,
                     ),
                   ],
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  margin: EdgeInsets.only(top: 24),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 0.3,
-                        color: Colors.black.withOpacity(0.5),
-                      ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 0.3,
+                      color: Colors.black.withOpacity(0.5),
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Compte',
-                        style: GoogleFonts.quicksand(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
                   ),
                 ),
-                Column(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    profilItemWithIcon(
-                      'Solde',
-                      Icons.payment_rounded,
-                      subTitle: userPt,
+                    Text(
+                      'Profil',
+                      style: GoogleFonts.quicksand(
+                        fontSize: 18,
+                      ),
                     ),
-                    profilItemWithIcon(
-                      'Mot de passe',
-                      Icons.lock,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => EditPassWord(userId),
-                          ),
-                        );
-                      },
-                      subTitle: '*********',
-                      trailing: Icons.arrow_forward_ios,
-                    ),
-                    profilItemWithIcon(
-                      'Email',
-                      Icons.mail,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => EditEmail(userId),
-                          ),
-                        );
-                        print(userId);
-                      },
-                      subTitle: '',
-                      trailing: Icons.arrow_forward_ios,
-                    ),
-                    profilItemWithIcon(
-                      'Numero',
-                      Icons.call,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => EditNumber(userId),
-                          ),
-                        );
-                      },
-                      subTitle: userNumb,
-                      trailing: Icons.arrow_forward_ios,
-                    ),
-                    profilItemWithIcon(
-                      'Deconnexion',
-                      Icons.lock_open_outlined,
-                      //trailing: Icons.arrow_right,
-                      subTitle: '',
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            title: Text('Confirmez'),
-                            content: Text('Vous allez vous deconnecter !'),
-                            actions: [
-                              FlatButton(
-                                onPressed: () {
-                                  Navigator.of(ctx).pop(false);
-                                },
-                                child: Text('Non'),
-                              ),
-                              FlatButton(
-                                onPressed: () {
-                                  logout();
-                                },
-                                child: Text('oui'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    )
                   ],
                 ),
-                SizedBox(
-                  height: 200,
-                )
-              ],
-            ),
+              ),
+              Column(
+                children: [
+                  profilItem(
+                    'Votre nom',
+                    subTitle: userNam,
+                  ),
+                  profilItem(
+                    'Votre email',
+                    subTitle: userEmail == null ? 'Non renseignée' : userEmail,
+                  ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                margin: EdgeInsets.only(top: 24),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 0.3,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      'Compte',
+                      style: GoogleFonts.quicksand(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  profilItemWithIcon(
+                    'Solde',
+                    Icons.payment_rounded,
+                    subTitle: userPt,
+                  ),
+                  profilItemWithIcon(
+                    'Mot de passe',
+                    Icons.lock,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EditPassWord(userId),
+                        ),
+                      );
+                    },
+                    subTitle: '*********',
+                    trailing: Icons.arrow_forward_ios,
+                  ),
+                  profilItemWithIcon(
+                    'Email',
+                    Icons.mail,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EditEmail(userId),
+                        ),
+                      );
+                      print(userId);
+                    },
+                    subTitle: '',
+                    trailing: Icons.arrow_forward_ios,
+                  ),
+                  profilItemWithIcon(
+                    'Numero',
+                    Icons.call,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EditNumber(userId),
+                        ),
+                      );
+                    },
+                    subTitle: userNumb,
+                    trailing: Icons.arrow_forward_ios,
+                  ),
+                  profilItemWithIcon(
+                    'Deconnexion',
+                    Icons.lock_open_outlined,
+                    //trailing: Icons.arrow_right,
+                    subTitle: '',
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: Text('Confirmez'),
+                          content: Text('Vous allez vous deconnecter !'),
+                          actions: [
+                            FlatButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop(false);
+                              },
+                              child: Text('Non'),
+                            ),
+                            FlatButton(
+                              onPressed: () {
+                                logout();
+                              },
+                              child: Text('oui'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+            ],
           ),
         ),
       ),

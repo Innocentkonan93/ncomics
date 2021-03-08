@@ -37,8 +37,6 @@ class _CartItemListState extends State<CartItemList> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String userID = prefs.getString('userid');
     final String userPoint = prefs.getString('userpoint');
-    final String userName = prefs.getString('username');
-
     if (userPoint != null) {
       setState(() {
         userId = userID;

@@ -26,23 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
   String point = '';
   bool isGrid = true;
 
-  _showSnackbar(String message, {Color bgColor}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: bgColor,
-        duration: Duration(seconds: 10),
-      ),
-    );
-  }
-
   _getBds() async {
     var provider = Provider.of<BdProvider>(context, listen: false);
     var response = await APIHelper.getBandeDessinees();
     if (response.isSuccesful) {
       provider.setBdList(response.data);
     } else {
-      _showSnackbar(response.message, bgColor: Colors.red);
+      //_showSnackbar(response.message, bgColor: Colors.red);
     }
     provider.setIsProcessing(false);
   }
@@ -56,20 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
       //_showSnackbar(resp.message);
     }
     provide.setIsProcessing(false);
-  }
-
-  Future<List> getCat() async {
-    try {
-      final res = await http
-          .get("http://bad-event.com/ncomic/dataHandling/getCategory.php");
-      return json.decode(res.body);
-    } on SocketException catch (e) {
-      throw SocketException(e.toString());
-    } on FormatException catch (_) {
-      throw FormatException("Unable to process the data");
-    } catch (e) {
-      throw e;
-    }
   }
 
   @override
@@ -147,6 +123,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               SizedBox(height: 10),
+              // Container(
+              //   height: 200,
+              //   child: ListView.builder(
+              //     itemBuilder: (context, index) {
+              //       return Container();
+              //     },
+              //     itemCount: 6,
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
                 child: Row(
@@ -181,14 +166,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.6,
+                height: MediaQuery.of(context).size.height * 0.5,
                 child: Consumer<BdProvider>(
                   builder: (_, bdProvider, __) {
                     return bdProvider.isProcessing
                         ? Center(
                             child: CircularProgressIndicator(),
                           )
-                        : ProductsGrid(isGrid);
+                        : Center(child: ProductsGrid(isGrid));
                   },
                 ),
               ),
